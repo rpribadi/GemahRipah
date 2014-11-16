@@ -9,11 +9,10 @@ from products.models import Comparison
 
 
 class Command(BaseCommand):
-    args = '<poll_id poll_id ...>'
     help = 'Updates comparison prices'
 
     def handle(self, *args, **options):
-        directory = "data/*.csv"
+        directory = "data/comparison/*.csv"
         try:
             for filename in glob.glob(directory):
                 print "Reading", filename
@@ -34,7 +33,7 @@ class Command(BaseCommand):
 
                 record, is_created = Comparison.objects.get_or_create(
                     seller=seller,
-                    product=line[0],
+                    product=line[0].strip(),
                     defaults={
                         'price': line[1],
                         'promotion_price': promotion_price,

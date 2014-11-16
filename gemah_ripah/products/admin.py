@@ -1,9 +1,7 @@
 from django.contrib import admin
 
-from models import Brand, Product, Comparison
+from models import Product, Comparison
 
-
-admin.site.register(Brand)
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):

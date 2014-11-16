@@ -12,10 +12,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Brand',
+            name='Comparison',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', products.models.CharUpperCaseField(unique=True, max_length=100)),
+                ('seller', products.models.CharUpperCaseField(max_length=100)),
+                ('product', products.models.CharUpperCaseField(max_length=255)),
+                ('price', models.DecimalField(max_digits=10, decimal_places=1)),
+                ('promotion_price', models.DecimalField(null=True, max_digits=10, decimal_places=1)),
+                ('last_update', models.DateTimeField(auto_now=True)),
             ],
             options={
             },
@@ -25,13 +29,22 @@ class Migration(migrations.Migration):
             name='Product',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', products.models.CharUpperCaseField(unique=True, max_length=255)),
+                ('brand', products.models.CharUpperCaseField(max_length=100)),
+                ('name', products.models.CharUpperCaseField(max_length=255)),
                 ('price', models.DecimalField(max_digits=10, decimal_places=1)),
                 ('stock', models.IntegerField(default=0)),
-                ('brand', models.ForeignKey(to='products.Brand')),
             ],
             options={
+                'ordering': ('brand', 'name'),
             },
             bases=(models.Model,),
+        ),
+        migrations.AlterUniqueTogether(
+            name='product',
+            unique_together=set([('brand', 'name')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='comparison',
+            unique_together=set([('product', 'seller')]),
         ),
     ]
