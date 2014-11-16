@@ -1,0 +1,1 @@
+Inventory app for GemahRipah shop.
