@@ -4,21 +4,30 @@
 
 {% block content %}
 {% if product_list %}
-    <table>
-        <tr>
-            <th>Brand</th>
-            <th>Product</th>
-            <th>Price</th>
-            <th>Stock</th>
-        </tr>
-    {% for product in product_list %}
-        <tr>
-            <td>{{ product.brand }}</td>
-            <td>{{ product.name }}</td>
-            <td>{{ product.price|intcomma }}</td>
-            <td>{{ product.stock }}</td>
-        </tr>
-    {% endfor %}
+    <p>
+        <span class="legend-item out-of-stock"></span> Out of stock
+    </p>
+    <table class="table table-condensed table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Brand</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in product_list %}
+            <tr class="{% if product.is_out_of_stock %}out-of-stock{% endif %}">
+                <td>{{ forloop.counter }}.</td>
+                <td>{{ product.brand }}</td>
+                <td>{{ product.name }}</td>
+                <td class="text-right">{{ product.price|intcomma }}</td>
+                <td class="text-right">{{ product.stock }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 {% else %}
     <p>No products are available.</p>

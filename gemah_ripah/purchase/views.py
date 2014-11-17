@@ -1,18 +1,18 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from models import Product
+from models import Purchase
 
 
 @login_required
 def index(request):
     context = {
-        'page_header': "Products",
-        'product_list': Product.objects.all()
+        'page_header': "Purchase",
+        'purchase_list': Purchase.objects.all()
     }
 
     return render(
         request,
-        'products/index.html',
+        'purchase/index.html',
         context
     )

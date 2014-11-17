@@ -1,11 +1,18 @@
+from django.contrib.auth.models import User
 from django.db import models
 
+from gemah_ripah.models import CharUpperCaseField
 
-class CharUpperCaseField(models.CharField):
-    def get_prep_value(self, value):
-        if not value:
-            return value
-        return value.upper()
+
+class Merchant(models.Model):
+    code = CharUpperCaseField(max_length=2, unique=True)
+    name = CharUpperCaseField(max_length=50, unique=True)
+
+    class Meta:
+        ordering = ("code",)
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
@@ -13,6 +20,8 @@ class Product(models.Model):
     name = CharUpperCaseField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=1)
     stock = models.IntegerField(default=0)
+    last_modified = models.DateTimeField(auto_now=True, editable=False)
+    user = models.ForeignKey(User, null=True)
 
     class Meta:
         ordering = ("brand", "name")
@@ -27,15 +36,17 @@ class Product(models.Model):
         return False
 
 
-class Comparison(models.Model):
-    seller = CharUpperCaseField(max_length=100)
-    product = CharUpperCaseField(max_length=255)
+class ProductComparison(models.Model):
+    product = models.ForeignKey(Product, null=True)
+    seller = models.ForeignKey(Merchant)
+    name = CharUpperCaseField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=1)
     promotion_price = models.DecimalField(max_digits=10, decimal_places=1, null=True)
-    last_update = models.DateTimeField(auto_now=True)
+    last_modified = models.DateTimeField(auto_now=True, editable=False)
+    user = models.ForeignKey(User, null=True)
 
     class Meta:
-        unique_together = ("product", "seller")
+        unique_together = ("seller", "name")
 
     def __str__(self):
         return "%s: %s: %s" % (self.seller, self.product, self.current_price)
@@ -52,12 +63,3 @@ class Comparison(models.Model):
         return False
 
 
-# class Transaction:
-#     pass
-#
-# class BuyTransaction:
-#     pass
-#
-# class SellTransaction:
-#     pass
-#

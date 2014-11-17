@@ -5,7 +5,7 @@ import os
 
 from django.core.management.base import BaseCommand, CommandError
 
-from products.models import Comparison
+from products.models import Merchant, ProductComparison
 
 
 class Command(BaseCommand):
@@ -21,7 +21,7 @@ class Command(BaseCommand):
             raise CommandError('Error saving data from directory "%s". Reason: %s' % (directory, e))
 
     def process(self, filename):
-        seller = os.path.splitext(os.path.basename(filename))[0]
+        seller = Merchant.objects.get(code=os.path.splitext(os.path.basename(filename))[0])
         today = datetime.datetime.now()
         counter = 1
 
@@ -31,7 +31,7 @@ class Command(BaseCommand):
             for line in reader:
                 promotion_price = line[2] if len(line) >= 3 and line[2] else None
 
-                record, is_created = Comparison.objects.get_or_create(
+                record, is_created = ProductComparison.objects.get_or_create(
                     seller=seller,
                     product=line[0].strip(),
                     defaults={

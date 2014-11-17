@@ -1,0 +1,14 @@
+body {
+    padding-top: 70px;i
+}
+
+.out-of-stock {
+    background-color: #8454FF !important;
+}
+
+.legend-item {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    float: left;
+}

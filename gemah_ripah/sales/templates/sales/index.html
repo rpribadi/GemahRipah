@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load humanize %}
+
+{% block content %}
+{% if sales_list %}
+    <table class="table table-condensed table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sales in sales_list %}
+            <tr>
+                <td>{{ forloop.counter }}.</td>
+                <td>{{ sales.date }}</td>
+                <td>{{ sales.product }}</td>
+                <td class="text-right">{{ sales.price|intcomma }}</td>
+                <td class="text-right">{{ sales.quantity }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No sales are available.</p>
+{% endif %}
+{% endblock %}
