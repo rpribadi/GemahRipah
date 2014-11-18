@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 from django.conf import settings
+import django.core.validators
 import gemah_ripah.models
 
 
@@ -33,8 +34,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('brand', gemah_ripah.models.CharUpperCaseField(max_length=100)),
                 ('name', gemah_ripah.models.CharUpperCaseField(max_length=255)),
-                ('price', models.DecimalField(max_digits=10, decimal_places=1)),
-                ('stock', models.IntegerField(default=0)),
+                ('price', models.DecimalField(max_digits=10, decimal_places=1, validators=[django.core.validators.MinValueValidator(0)])),
+                ('total_purchased', models.IntegerField(default=0)),
+                ('total_sold', models.IntegerField(default=0)),
                 ('last_modified', models.DateTimeField(auto_now=True)),
                 ('modified_by', models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL, null=True)),
             ],
@@ -48,8 +50,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', gemah_ripah.models.CharUpperCaseField(max_length=255)),
-                ('price', models.DecimalField(max_digits=10, decimal_places=1)),
-                ('promotion_price', models.DecimalField(null=True, max_digits=10, decimal_places=1)),
+                ('price', models.DecimalField(max_digits=10, decimal_places=1, validators=[django.core.validators.MinValueValidator(0)])),
+                ('promotion_price', models.DecimalField(null=True, max_digits=10, decimal_places=1, validators=[django.core.validators.MinValueValidator(0)])),
                 ('last_modified', models.DateTimeField(auto_now=True)),
                 ('modified_by', models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL, null=True)),
                 ('product', models.ForeignKey(to='products.Product', null=True)),

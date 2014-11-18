@@ -12,3 +12,7 @@ body {
     margin-right: 10px;
     float: left;
 }
+
+.errorlist {
+    color: #a94442;
+}

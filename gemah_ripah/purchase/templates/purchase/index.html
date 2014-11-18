@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "purchase/base.html" %}
 
 {% load humanize %}
 
@@ -10,8 +10,8 @@
                 <th>#</th>
                 <th>Date</th>
                 <th>Supplier</th>
-                <th>Total</th>
-                <th>Discount</th>
+                <th>Total Expenses</th>
+                <th>Total Items</th>
             </tr>
         </thead>
         <tbody>
@@ -20,8 +20,8 @@
                 <td>{{ forloop.counter }}.</td>
                 <td>{{ purchase.date }}</td>
                 <td>{{ purchase.supplier }}</td>
-                <td class="text-right">{{ purchase.total }}</td>
-                <td class="text-right">{{ purchase.discount|intcomma }}</td>
+                <td class="text-right">{{ purchase.total_expenses|intcomma }}</td>
+                <td class="text-right">{{ purchase.total_items }}</td>
             </tr>
             {% endfor %}
         </tbody>

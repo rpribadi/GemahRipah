@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "purchase/base.html" %}
 
 {% load humanize %}
 {% load widget_tweaks %}
@@ -6,47 +6,86 @@
 {% block content %}
 
 <form method="post" action="." role="form" class="form-horizontal">
+    {% csrf_token %}
     {{ formset.management_form }}
+
+    {% if form_status == "error" %}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Failed to save record. Please correct the errors below.
+    </div>
+    {% endif %}
+
     <div class="row">
         <div class="col-md-8">
 
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="{{ form.date.auto_id }}">{{ form.date.label }}:</label>
-                <div class="col-sm-5">
+            <div class="form-group {% if form.date.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.date.auto_id }}">{{ form.date.label }}:</label>
+                <div class="col-sm-4">
+                    {{ form.date.errors }}
                     {{ form.date|add_class:"form-control" }}
                 </div>
             </div>
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="{{ form.discount.auto_id }}">{{ form.discount.label }}:</label>
-                <div class="col-sm-5">
+            <div class="form-group {% if form.supplier.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.supplier.auto_id }}">{{ form.supplier.label }}:</label>
+                <div class="col-sm-4">
+                    {{ form.supplier.errors }}
+                    {{ form.supplier|add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="form-group {% if form.discount.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.discount.auto_id }}">{{ form.discount.label }}:</label>
+                <div class="col-sm-4">
+                    {{ form.discount.errors }}
                     {{ form.discount|add_class:"form-control" }}
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-
         <div class="col-md-12">
-            <table class="table table-bordered table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for form in formset %}
-                    <tr>
-                        <td>{{ form.product|add_class:"form-control" }}</td>
-                        <td>{{ form.price|add_class:"form-control" }}</td>
-                        <td>{{ form.quantity|add_class:"form-control" }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+            <fieldset class="purchase-items">
+                <legend>Purchase Items (Total Expenses: <span id="total-expenses">0</span>)</legend>
 
-            </table>
+                {% if formset.non_form_errors %}
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    {% for error in formset.non_form_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for form in formset %}
+                        <tr>
+                            <td class="{% if form.product.errors %} has-error {% endif %}">
+                                {{ form.product.errors }}
+                                {{ form.product|add_class:"form-control" }}
+                            </td>
+                            <td class="{% if form.price.errors %} has-error {% endif %}">
+                                {{ form.price.errors }}
+                                {{ form.price|add_class:"form-control" }}
+                            </td>
+                            <td class="{% if form.quantity.errors %} has-error {% endif %}">
+                                {{ form.quantity.errors }}
+                                {{ form.quantity|add_class:"form-control" }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </fieldset>
         </div>
     </div>
     <div class="row">
@@ -60,4 +99,35 @@
     </div>
 </form>
 
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    $("#id_date").datepicker({
+        format: "mm/dd/yyyy"
+    })
+    .on("changeDate", function(){
+        $("#id_date").datepicker("hide");
+    });
+
+    $(".purchase-items input").on("blur", function(){
+        var totalExpenses = 0;
+        $(".purchase-items tr").each(function(){
+            var price = $(this).find("input[name$='-price']").val();
+            var quantity = $(this).find("input[name$='-quantity']").val();
+            if( $.isNumeric(price) && $.isNumeric(quantity) ) {
+                totalExpenses += parseFloat(price) * parseFloat(quantity);
+            }
+        });
+
+        $("#total-expenses").html(numberWithCommas(totalExpenses));
+    });
+
+});
+</script>
 {% endblock %}

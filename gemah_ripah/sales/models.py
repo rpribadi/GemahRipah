@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from products.models import Product
@@ -6,7 +7,7 @@ from products.models import Product
 
 class Sales(models.Model):
     date = models.DateField()
-    discount = models.DecimalField(max_digits=10, decimal_places=1, default=0)
+    discount = models.DecimalField(max_digits=10, decimal_places=1, default=0, validators=[MinValueValidator(0)])
     last_modified = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, editable=False)
 
@@ -20,8 +21,8 @@ class Sales(models.Model):
 class SalesItem(models.Model):
     sales = models.ForeignKey(Sales)
     product = models.ForeignKey(Product)
-    price = models.DecimalField(max_digits=10, decimal_places=1)
-    quantity = models.IntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=1, validators=[MinValueValidator(0)])
+    quantity = models.PositiveIntegerField(default=0)
     last_modified = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, editable=False)
 

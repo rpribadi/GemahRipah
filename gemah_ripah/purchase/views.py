@@ -3,8 +3,9 @@ from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from models import Purchase, PurchaseItem
+from gemah_ripah.forms import MinimumRequiredFormSet
 from forms import PurchaseForm, PurchaseItemForm
+from models import Purchase, PurchaseItem
 
 
 @login_required
@@ -23,24 +24,46 @@ def index(request):
 
 @login_required
 def add(request):
-    PurchaseItemFormSet = inlineformset_factory(Purchase, PurchaseItem)
+    PurchaseItemFormSet = inlineformset_factory(
+        Purchase,
+        PurchaseItem,
+        formset=MinimumRequiredFormSet,
+        form=PurchaseItemForm
+    )
     if request.method == "POST":
         form = PurchaseForm(request.POST)
-        formset = PurchaseItemFormSet(request.POST)
-        if form.is_valid and formset.is_valid():
+        formset = PurchaseItemFormSet(
+            request.POST,
+            minimum_forms=1,
+            minimum_forms_message="At least 1 purchase item is required."
+        )
+        if form.is_valid() and formset.is_valid():
             purchase = form.save()
-            formset.save()
-            # Do something. Should generally end with a redirect. For example:
+            items = formset.save(commit=False)
+            form_status = "valid"
+            for item in items:
+                item.purchase = purchase
+                item.save()
             return HttpResponseRedirect(".")
+        else:
+            form_status = "error"
+            print "FORM INVALID"
+            print form.errors
+            print formset.errors
+            print formset.non_form_errors()
     else:
+        form_status = "new"
         form = PurchaseForm()
-        formset = PurchaseItemFormSet()
+        formset = PurchaseItemFormSet(
+            minimum_forms=1
+        )
 
 
     context = {
         'page_header': "Add New Purchase",
         'form': form,
         'formset': formset,
+        'form_status': form_status
     }
 
     return render(

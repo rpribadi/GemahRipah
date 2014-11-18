@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from gemah_ripah.models import CharUpperCaseField
@@ -20,8 +21,9 @@ class Merchant(models.Model):
 class Product(models.Model):
     brand = CharUpperCaseField(max_length=100)
     name = CharUpperCaseField(max_length=255)
-    price = models.DecimalField(max_digits=10, decimal_places=1)
-    stock = models.IntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=1, validators=[MinValueValidator(0)])
+    total_purchased = models.IntegerField(default=0)
+    total_sold = models.IntegerField(default=0)
     last_modified = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, null=True, editable=False)
 
@@ -31,6 +33,10 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def stock(self):
+        return self.total_purchased - self.total_sold
 
     def is_out_of_stock(self):
         if self.stock <= 0:
@@ -42,8 +48,8 @@ class ProductComparison(models.Model):
     product = models.ForeignKey(Product, null=True)
     seller = models.ForeignKey(Merchant)
     name = CharUpperCaseField(max_length=255)
-    price = models.DecimalField(max_digits=10, decimal_places=1)
-    promotion_price = models.DecimalField(max_digits=10, decimal_places=1, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=1, validators=[MinValueValidator(0)])
+    promotion_price = models.DecimalField(max_digits=10, decimal_places=1, null=True, validators=[MinValueValidator(0)])
     last_modified = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, null=True, editable=False)
 
