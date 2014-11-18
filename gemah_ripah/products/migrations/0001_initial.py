@@ -2,26 +2,28 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import products.models
+from django.conf import settings
+import gemah_ripah.models
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Comparison',
+            name='Merchant',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('seller', products.models.CharUpperCaseField(max_length=100)),
-                ('product', products.models.CharUpperCaseField(max_length=255)),
-                ('price', models.DecimalField(max_digits=10, decimal_places=1)),
-                ('promotion_price', models.DecimalField(null=True, max_digits=10, decimal_places=1)),
-                ('last_update', models.DateTimeField(auto_now=True)),
+                ('code', gemah_ripah.models.CharUpperCaseField(unique=True, max_length=2)),
+                ('name', gemah_ripah.models.CharUpperCaseField(unique=True, max_length=50)),
+                ('last_modified', models.DateTimeField(auto_now=True)),
+                ('modified_by', models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
+                'ordering': ('code',),
             },
             bases=(models.Model,),
         ),
@@ -29,22 +31,40 @@ class Migration(migrations.Migration):
             name='Product',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('brand', products.models.CharUpperCaseField(max_length=100)),
-                ('name', products.models.CharUpperCaseField(max_length=255)),
+                ('brand', gemah_ripah.models.CharUpperCaseField(max_length=100)),
+                ('name', gemah_ripah.models.CharUpperCaseField(max_length=255)),
                 ('price', models.DecimalField(max_digits=10, decimal_places=1)),
                 ('stock', models.IntegerField(default=0)),
+                ('last_modified', models.DateTimeField(auto_now=True)),
+                ('modified_by', models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
                 'ordering': ('brand', 'name'),
             },
             bases=(models.Model,),
         ),
+        migrations.CreateModel(
+            name='ProductComparison',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', gemah_ripah.models.CharUpperCaseField(max_length=255)),
+                ('price', models.DecimalField(max_digits=10, decimal_places=1)),
+                ('promotion_price', models.DecimalField(null=True, max_digits=10, decimal_places=1)),
+                ('last_modified', models.DateTimeField(auto_now=True)),
+                ('modified_by', models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL, null=True)),
+                ('product', models.ForeignKey(to='products.Product', null=True)),
+                ('seller', models.ForeignKey(to='products.Merchant')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AlterUniqueTogether(
+            name='productcomparison',
+            unique_together=set([('seller', 'name')]),
+        ),
         migrations.AlterUniqueTogether(
             name='product',
             unique_together=set([('brand', 'name')]),
-        ),
-        migrations.AlterUniqueTogether(
-            name='comparison',
-            unique_together=set([('product', 'seller')]),
         ),
     ]

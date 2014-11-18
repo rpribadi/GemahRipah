@@ -7,6 +7,8 @@ from gemah_ripah.models import CharUpperCaseField
 class Merchant(models.Model):
     code = CharUpperCaseField(max_length=2, unique=True)
     name = CharUpperCaseField(max_length=50, unique=True)
+    last_modified = models.DateTimeField(auto_now=True, editable=False)
+    modified_by = models.ForeignKey(User, null=True, editable=False)
 
     class Meta:
         ordering = ("code",)
@@ -21,7 +23,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=1)
     stock = models.IntegerField(default=0)
     last_modified = models.DateTimeField(auto_now=True, editable=False)
-    user = models.ForeignKey(User, null=True)
+    modified_by = models.ForeignKey(User, null=True, editable=False)
 
     class Meta:
         ordering = ("brand", "name")
@@ -43,7 +45,7 @@ class ProductComparison(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=1)
     promotion_price = models.DecimalField(max_digits=10, decimal_places=1, null=True)
     last_modified = models.DateTimeField(auto_now=True, editable=False)
-    user = models.ForeignKey(User, null=True)
+    modified_by = models.ForeignKey(User, null=True, editable=False)
 
     class Meta:
         unique_together = ("seller", "name")

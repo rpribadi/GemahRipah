@@ -8,7 +8,7 @@ class Sales(models.Model):
     date = models.DateField()
     discount = models.DecimalField(max_digits=10, decimal_places=1, default=0)
     last_modified = models.DateTimeField(auto_now=True, editable=False)
-    user = models.ForeignKey(User)
+    modified_by = models.ForeignKey(User, editable=False)
 
     class Meta:
         ordering = ("-date", )
@@ -23,7 +23,7 @@ class SalesItem(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=1)
     quantity = models.IntegerField(default=0)
     last_modified = models.DateTimeField(auto_now=True, editable=False)
-    user = models.ForeignKey(User)
+    modified_by = models.ForeignKey(User, editable=False)
 
     class Meta:
         ordering = ('product__name', )
