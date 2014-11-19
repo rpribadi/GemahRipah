@@ -9,8 +9,8 @@ import django.core.validators
 class Migration(migrations.Migration):
 
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('products', '0001_initial'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -19,12 +19,13 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('date', models.DateField()),
-                ('discount', models.DecimalField(default=0, max_digits=10, decimal_places=1, validators=[django.core.validators.MinValueValidator(0)])),
+                ('discount', models.DecimalField(default=0, max_digits=10, decimal_places=1)),
+                ('remarks', models.TextField(null=True)),
                 ('last_modified', models.DateTimeField(auto_now=True)),
                 ('modified_by', models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'ordering': ('-date',),
+                'ordering': ('-date', '-id'),
             },
             bases=(models.Model,),
         ),

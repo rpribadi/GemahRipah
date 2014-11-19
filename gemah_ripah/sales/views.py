@@ -1,8 +1,9 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.contrib import messages
 
 from gemah_ripah.forms import MinimumRequiredFormSet
 from forms import SalesForm, SalesItemForm
@@ -43,7 +44,7 @@ def add(request):
             for item in items:
                 item.sales = sales
                 item.save()
-            messages.success(request, 'Record has been save successfully.')
+            messages.success(request, 'Record has been saved successfully.')
             return HttpResponseRedirect(".")
         else:
             messages.error(request, 'Failed to save record. Please correct the errors below.', extra_tags='danger')
@@ -80,3 +81,14 @@ def detail(request, id):
         'sales/detail.html',
         context
     )
+
+
+@login_required
+def delete(request, id):
+    obj = get_object_or_404(Sales, pk=id)
+    try:
+        obj.delete()
+        messages.success(request, 'Record has been deleted successfully.')
+    except Exception, e:
+        messages.error(request, 'Failed to delete record. Reason: %s' % e, extra_tags='danger')
+    return HttpResponseRedirect(reverse("sales:index"))

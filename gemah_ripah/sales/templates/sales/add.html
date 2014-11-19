@@ -37,7 +37,14 @@
                     {{ form.discount|add_class:"form-control" }}
                 </div>
             </div>
-        </div>
+             <div class="form-group {% if form.remarks.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.remarks.auto_id }}">{{ form.remarks.label }}</label>
+                <div class="col-sm-6">
+                    {{ form.remarks.errors }}
+                    {{ form.remarks|add_class:"form-control"|attr:"rows:2" }}
+                </div>
+            </div>
+       </div>
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -91,7 +98,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-sm-offset-3 col-sm-10">
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </div>
@@ -138,7 +145,7 @@ $(document).ready(function(){
     $('.sales-items tbody tr').formset({
         prefix: '{{ formset.prefix }}',
         addText: "Add Another Row",
-        deleteText: "Remove",
+        deleteText: "Delete",
         added: function(row) {
             renumberRow(row);
         },

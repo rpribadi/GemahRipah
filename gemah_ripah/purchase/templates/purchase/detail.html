@@ -10,8 +10,8 @@
             <table class="table table-striped table-header">
                 <tbody>
                     <tr>
-                        <td class="col-md-2">Date</td>
-                        <td class="col-md-4">{{ purchase.date }}</td>
+                        <td class="col-md-5">Date</td>
+                        <td class="">{{ purchase.date }}</td>
                     </tr>
                     <tr>
                         <td>Supplier</td>
@@ -33,8 +33,18 @@
                         <td><strong>Net Expenses</strong></td>
                         <td><mark><strong>{{ purchase.net_expenses|intcomma }}</strong></mark></td>
                     </tr>
+                    {% if purchase.remarks %}
+                    <tr>
+                        <td>Remarks</td>
+                        <td>{{ purchase.remarks }}</td>
+                    </tr>
+                    {% endif %}
                 </tbody>
             </table>
+            <div class="col-md-offset-5">
+                    <a href="{% url 'purchase:edit' purchase.id %}" class="btn btn-primary">Edit</a>
+                    <a href="{% url 'purchase:delete' purchase.id %}" class="delete btn btn-primary">Delete</a>
+            </div>
         </div>
     </div>
     <div class="row">

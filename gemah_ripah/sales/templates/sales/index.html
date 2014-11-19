@@ -3,24 +3,26 @@
 {% load humanize %}
 
 {% block content %}
-{% if sales_list %}
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}" role="alert">
-                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                <span class="sr-only">{{  message.level }}:</span>
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">{{  message.level }}:</span>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
 
+{% if sales_list %}
     <table class="table table-condensed table-striped table-bordered table-hover">
         <thead>
             <tr>
                 <th>#</th>
-                <th>Date</th>
-                <th>Net Income</th>
-                <th>Total Items</th>
+                <th class="col-xs-2">Date</th>
+                <th class="col-xs-2">Net Income</th>
+                <th class="col-xs-2">Total Items</th>
+                <th>Remarks</th>
+                <th class="col-xs-1">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +32,8 @@
                     <td><a href="{% url 'sales:detail' sales.id %}">{{ sales.date }}</a></td>
                 <td class="text-right">{{ sales.net_income|intcomma }}</td>
                 <td class="text-right">{{ sales.total_items }}</td>
+                <td>{{ sales.remarks }}</td>
+                <td class="text-center"><a href="{% url 'sales:delete' sales.id %}" class="delete">Delete</a></td>
             </tr>
             {% endfor %}
         </tbody>

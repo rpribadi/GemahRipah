@@ -9,8 +9,8 @@ import django.core.validators
 class Migration(migrations.Migration):
 
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('products', '0001_initial'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('supplier', models.ForeignKey(to='products.Merchant')),
             ],
             options={
-                'ordering': ('-date',),
+                'ordering': ('-date', '-id'),
             },
             bases=(models.Model,),
         ),

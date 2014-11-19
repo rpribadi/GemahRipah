@@ -1,9 +1,9 @@
-{% extends "purchase/base.html" %}
+{% extends "other_expenses/base.html" %}
 
 {% load humanize %}
 
 {% block sub_menu %}
-    <a href="{% url 'purchase:add' %}" class="btn btn-primary">Add New Purchase</a>
+    <a href="{% url 'other_expenses:add' %}" class="btn btn-primary">Add New Other Expenses</a>
 {% endblock %}
 
 {% block content %}
@@ -17,38 +17,42 @@
         {% endfor %}
     {% endif %}
 
-    {% if purchase_list %}
+    {% if other_expenses_list %}
         <table class="table table-condensed table-striped table-bordered table-hover">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Date</th>
-                    <th>Supplier</th>
-                    <th>Net Expenses</th>
-                    <th>Total Items</th>
-                    <th>Remarks</th>
+                    <th class="col-md-6">Remarks</th>
+                    <th class="col-md-2">Amount</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                {% for purchase in purchase_list %}
+                {% for item in other_expenses_list %}
                 <tr>
                     <td>{{ forloop.counter }}.</td>
-                    <td><a href="{% url 'purchase:detail' purchase.id %}">{{ purchase.date }}</a></td>
-                    <td>{{ purchase.supplier }}</td>
-                    <td class="text-right">{{ purchase.net_expenses|intcomma }}</td>
-                    <td class="text-right">{{ purchase.total_items }}</td>
-                    <td>{{ purchase.remarks }}</td>
+                    <td>{{ item.date }}</td>
+                    <td>{{ item.remarks }}</td>
+                    <td class="text-right">{{ item.amount|intcomma }}</td>
                     <td class="text-center">
-                        <a href="{% url 'purchase:edit' purchase.id %}">Edit</a>
+                        <a href="{% url 'other_expenses:edit' item.id %}">Edit</a>
                         |
-                        <a href="{% url 'purchase:delete' purchase.id %}" class="delete">Delete</a>
+                        <a href="{% url 'other_expenses:delete' item.id %}" class="delete">Delete</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <p>No purchases are available.</p>
+        <p>No other expenses are available.</p>
     {% endif %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+
+});
+</script>
 {% endblock %}

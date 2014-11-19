@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^products/', include('products.urls', namespace="products")),
     url(r'^sales/', include('sales.urls', namespace="sales")),
     url(r'^purchase/', include('purchase.urls', namespace="purchase")),
+    url(r'^other-expenses/', include('other_expenses.urls', namespace="other_expenses")),
 
     url(r'^secured/', include(admin.site.urls)),
 )

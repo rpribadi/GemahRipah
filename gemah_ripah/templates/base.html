@@ -28,6 +28,7 @@
                     <li><a href="{% url 'products:index' %}">Products</a></li>
                     <li><a href="{% url 'sales:index' %}">Sales</a></li>
                     <li><a href="{% url 'purchase:index' %}">Purchase</a></li>
+                    <li><a href="{% url 'other_expenses:index' %}">Other Expenses</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="navbar-text">Welcome, {{ user.username }}</li>
@@ -38,7 +39,7 @@
     </nav>
 
     <div class="container">
-        <div class="page-header">
+        <div class="page-header main-header">
             <div class="row">
                 <div class="col-md-6 col-sm-6">
                     <h1>{{ page_header }}</h1>
@@ -64,7 +65,15 @@
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
     <script src="{% static 'js/jquery.formset.js' %}"></script>
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
 
+    <script>
+        $(document).ready(function(){
+            $('a.delete').click(function(e){
+                return confirm("Are you sure to delete this record?");
+            });
+        });
+    </script>
     {% block javascript %}
     {% endblock %}
 </body>

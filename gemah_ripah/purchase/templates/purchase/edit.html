@@ -79,8 +79,14 @@
                     </thead>
                     <tbody>
                         {% for form in formset %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
+                        <tr id="{{ form.prefix }}-row">
+                            <td>
+                                {{ forloop.counter }}
+                                {% for fld in form.hidden_fields %}
+                                    {{ fld }}
+                                {% endfor %}
+                                {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+                            </td>
                             <td class="{% if form.product.errors %} has-error {% endif %}">
                                 {{ form.product.errors }}
                                 {{ form.product|add_class:"form-control" }}
@@ -107,7 +113,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-10">
                     <button type="submit" class="btn btn-primary">Save</button>
-                    <a href="{% url 'purchase:index' %}" class="btn btn-primary">Back to Index</a>
+                    <a href="{% url 'purchase:index' %}" class="btn btn-primary">Cancel</a>
                 </div>
             </div>
         </div>
@@ -130,7 +136,7 @@ $(document).ready(function(){
         $("#id_date").datepicker("hide");
     });
 
-    $(".purchase-items input").on("blur", function(){
+    function calculateGrossExpenses() {
         var totalExpenses = 0;
         $(".purchase-items tr").each(function(){
             var price = $(this).find("input[name$='-price']").val();
@@ -141,10 +147,15 @@ $(document).ready(function(){
         });
 
         $("#total-expenses").html(numberWithCommas(totalExpenses));
+    }
+
+    $(".purchase-items input").on("blur", function(){
+        calculateGrossExpenses();
     });
+    calculateGrossExpenses();
 
 
-    function renumberRow(row) {
+    function renumberRow() {
         $(".purchase-items tbody tr.dynamic-form").each(function(index){
             $(this).find("td:first-child").html( (index + 1) + ".");
         });
@@ -154,11 +165,11 @@ $(document).ready(function(){
         prefix: '{{ formset.prefix }}',
         addText: "Add Another Row",
         deleteText: "Delete",
-        added: function(row) {
-            renumberRow(row);
+        added: function() {
+            renumberRow();
         },
-        deleted: function(row) {
-            renumberRow(row);
+        deleted: function() {
+            renumberRow();
         }
     });
 });

@@ -29,6 +29,12 @@
                         <td><strong>Net Income</strong></td>
                         <td><mark><strong>{{ sales.net_income|intcomma }}</strong></mark></td>
                     </tr>
+                    {% if sales.remarks %}
+                    <tr>
+                        <td>Remarks</td>
+                        <td>{{ sales.remarks }}</td>
+                    </tr>
+                    {% endif %}
                 </tbody>
             </table>
         </div>

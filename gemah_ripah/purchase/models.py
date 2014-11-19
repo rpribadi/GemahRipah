@@ -10,6 +10,7 @@ class Purchase(models.Model):
     supplier = models.ForeignKey(Merchant)
     date = models.DateField()
     discount = models.DecimalField(max_digits=10, decimal_places=1, default=0)
+    remarks = models.TextField(blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, editable=False)
 
@@ -54,21 +55,42 @@ class PurchaseItem(models.Model):
         return "%s: %d @ %f" % (self.product, self.quantity, self.price)
 
 
+@receiver(models.signals.pre_save, sender=PurchaseItem)
+def on_pre_save_callback(sender, **kwargs):
+    print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+    update_pre_total_purchased(kwargs['instance'])
+
+
 @receiver(models.signals.post_save, sender=PurchaseItem)
-def on_save_callback(sender, **kwargs):
-    update_total_purchased(kwargs['instance'].product)
+def on_post_save_callback(sender, **kwargs):
+    update_post_total_purchased(kwargs['instance'])
 
 
 @receiver(models.signals.post_delete, sender=PurchaseItem)
 def on_delete_callback(sender, **kwargs):
-    update_total_purchased(kwargs['instance'].product)
+    update_post_total_purchased(kwargs['instance'])
 
 
-def update_total_purchased(product):
+def update_pre_total_purchased(instance):
+    if instance.id:
+        old_instance = PurchaseItem.objects.get(pk=instance.id)
+        if old_instance.product.id != instance.product.id:
+            total = 0
+            items = PurchaseItem.objects.filter(product=old_instance.product).exclude(pk=old_instance.id)
+            for item in items:
+                total += item.quantity
+            old_instance.product.total_purchased = total
+
+            old_instance.product.save()
+
+
+def update_post_total_purchased(instance):
     total = 0
-    items = PurchaseItem.objects.filter(product=product)
-    for item in items :
+    items = PurchaseItem.objects.filter(product=instance.product)
+    for item in items:
         total += item.quantity
-    product.total_purchased = total
+    instance.product.total_purchased = total
 
-    product.save()
+    instance.product.save()
+
+

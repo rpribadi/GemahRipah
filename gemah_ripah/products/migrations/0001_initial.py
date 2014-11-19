@@ -37,6 +37,7 @@ class Migration(migrations.Migration):
                 ('price', models.DecimalField(max_digits=10, decimal_places=1, validators=[django.core.validators.MinValueValidator(0)])),
                 ('total_purchased', models.IntegerField(default=0)),
                 ('total_sold', models.IntegerField(default=0)),
+                ('remarks', models.TextField(null=True)),
                 ('last_modified', models.DateTimeField(auto_now=True)),
                 ('modified_by', models.ForeignKey(editable=False, to=settings.AUTH_USER_MODEL, null=True)),
             ],
