@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
 
 from gemah_ripah.forms import MinimumRequiredFormSet
 from forms import PurchaseForm, PurchaseItemForm
@@ -40,19 +41,18 @@ def add(request):
         if form.is_valid() and formset.is_valid():
             purchase = form.save()
             items = formset.save(commit=False)
-            form_status = "valid"
             for item in items:
                 item.purchase = purchase
                 item.save()
+            messages.success(request, 'Record has been save successfully.')
             return HttpResponseRedirect(".")
         else:
-            form_status = "error"
+            messages.error(request, 'Failed to save record. Please correct the errors below.', extra_tags='danger')
             print "FORM INVALID"
             print form.errors
             print formset.errors
             print formset.non_form_errors()
     else:
-        form_status = "new"
         form = PurchaseForm()
         formset = PurchaseItemFormSet(
             minimum_forms=1
@@ -62,8 +62,7 @@ def add(request):
     context = {
         'page_header': "Add New Purchase",
         'form': form,
-        'formset': formset,
-        'form_status': form_status
+        'formset': formset
     }
 
     return render(
