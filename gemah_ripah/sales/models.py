@@ -8,7 +8,7 @@ from products.models import Product
 
 class Sales(models.Model):
     date = models.DateField()
-    discount = models.DecimalField(max_digits=10, decimal_places=1, default=0, validators=[MinValueValidator(0)])
+    discount = models.DecimalField(max_digits=10, decimal_places=1, default=0)
     last_modified = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, editable=False)
 
