@@ -20,7 +20,7 @@ class Purchase(models.Model):
         return "%s: %s" % (self.date, self.supplier)
 
     @property
-    def total_expenses(self):
+    def gross_expenses(self):
         total_expenses = 0
         for item in self.purchaseitem_set.all():
             total_expenses += (item.price * item.quantity)
@@ -36,6 +36,9 @@ class Purchase(models.Model):
 
         return total_items
 
+    @property
+    def net_expenses(self):
+        return self.gross_expenses - self.discount
 
 class PurchaseItem(models.Model):
     purchase = models.ForeignKey(Purchase)

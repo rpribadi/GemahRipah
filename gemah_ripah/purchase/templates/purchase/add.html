@@ -21,21 +21,21 @@
         <div class="col-md-8">
 
             <div class="form-group {% if form.date.errors %} has-error {% endif %}">
-                <label class="col-sm-3 control-label" for="{{ form.date.auto_id }}">{{ form.date.label }}:</label>
+                <label class="col-sm-3 control-label" for="{{ form.date.auto_id }}">{{ form.date.label }}</label>
                 <div class="col-sm-4">
                     {{ form.date.errors }}
                     {{ form.date|add_class:"form-control" }}
                 </div>
             </div>
             <div class="form-group {% if form.supplier.errors %} has-error {% endif %}">
-                <label class="col-sm-3 control-label" for="{{ form.supplier.auto_id }}">{{ form.supplier.label }}:</label>
+                <label class="col-sm-3 control-label" for="{{ form.supplier.auto_id }}">{{ form.supplier.label }}</label>
                 <div class="col-sm-4">
                     {{ form.supplier.errors }}
                     {{ form.supplier|add_class:"form-control" }}
                 </div>
             </div>
             <div class="form-group {% if form.discount.errors %} has-error {% endif %}">
-                <label class="col-sm-3 control-label" for="{{ form.discount.auto_id }}">{{ form.discount.label }}:</label>
+                <label class="col-sm-3 control-label" for="{{ form.discount.auto_id }}">{{ form.discount.label }}</label>
                 <div class="col-sm-4">
                     {{ form.discount.errors }}
                     {{ form.discount|add_class:"form-control" }}
@@ -46,7 +46,7 @@
     <div class="row">
         <div class="col-md-12">
             <fieldset class="purchase-items">
-                <legend>Purchase Items (Total Expenses: <span id="total-expenses">0</span>)</legend>
+                <legend>Purchase Items (Gross Expenses: <span id="total-expenses">0</span>)</legend>
 
                 {% if formset.non_form_errors %}
                 <div class="alert alert-danger" role="alert">

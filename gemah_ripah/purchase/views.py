@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from gemah_ripah.forms import MinimumRequiredFormSet
 from forms import PurchaseForm, PurchaseItemForm
@@ -69,5 +69,21 @@ def add(request):
     return render(
         request,
         'purchase/add.html',
+        context
+    )
+
+
+@login_required
+def detail(request, id):
+    purchase = get_object_or_404(Purchase, pk=id)
+
+    context = {
+        'page_header': "Purchase Detail",
+        'purchase': purchase
+    }
+
+    return render(
+        request,
+        'purchase/detail.html',
         context
     )

@@ -10,7 +10,7 @@
                 <th>#</th>
                 <th>Date</th>
                 <th>Supplier</th>
-                <th>Total Expenses</th>
+                <th>Net Expenses</th>
                 <th>Total Items</th>
             </tr>
         </thead>
@@ -18,9 +18,9 @@
             {% for purchase in purchase_list %}
             <tr>
                 <td>{{ forloop.counter }}.</td>
-                <td>{{ purchase.date }}</td>
+                <td><a href="{% url 'purchase:detail' purchase.id %}">{{ purchase.date }}</a></td>
                 <td>{{ purchase.supplier }}</td>
-                <td class="text-right">{{ purchase.total_expenses|intcomma }}</td>
+                <td class="text-right">{{ purchase.net_expenses|intcomma }}</td>
                 <td class="text-right">{{ purchase.total_items }}</td>
             </tr>
             {% endfor %}
