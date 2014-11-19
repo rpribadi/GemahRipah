@@ -14,7 +14,7 @@ class Purchase(models.Model):
     modified_by = models.ForeignKey(User, editable=False)
 
     class Meta:
-        ordering = ("-date", )
+        ordering = ("-date", "-id")
 
     def __str__(self):
         return "%s: %s" % (self.date, self.supplier)
@@ -24,7 +24,6 @@ class Purchase(models.Model):
         total_expenses = 0
         for item in self.purchaseitem_set.all():
             total_expenses += (item.price * item.quantity)
-        total_expenses -= self.discount
 
         return total_expenses
 
@@ -55,21 +54,21 @@ class PurchaseItem(models.Model):
         return "%s: %d @ %f" % (self.product, self.quantity, self.price)
 
 
-
 @receiver(models.signals.post_save, sender=PurchaseItem)
 def on_save_callback(sender, **kwargs):
-    kwargs['instance'].product.total_purchased = get_total_purchased(kwargs['instance'].product)
-    kwargs['instance'].product.save()
+    update_total_purchased(kwargs['instance'].product)
+
 
 @receiver(models.signals.post_delete, sender=PurchaseItem)
 def on_delete_callback(sender, **kwargs):
-    kwargs['instance'].product.total_purchased = get_total_purchased(kwargs['instance'].product)
-    kwargs['instance'].product.save()
+    update_total_purchased(kwargs['instance'].product)
 
 
-def get_total_purchased(product):
+def update_total_purchased(product):
     total = 0
     items = PurchaseItem.objects.filter(product=product)
     for item in items :
         total += item.quantity
-    return total
+    product.total_purchased = total
+
+    product.save()

@@ -48,16 +48,11 @@ def add(request):
             return HttpResponseRedirect(".")
         else:
             messages.error(request, 'Failed to save record. Please correct the errors below.', extra_tags='danger')
-            print "FORM INVALID"
-            print form.errors
-            print formset.errors
-            print formset.non_form_errors()
     else:
         form = PurchaseForm()
         formset = PurchaseItemFormSet(
             minimum_forms=1
         )
-
 
     context = {
         'page_header': "Add New Purchase",
@@ -77,7 +72,7 @@ def detail(request, id):
     purchase = get_object_or_404(Purchase, pk=id)
 
     context = {
-        'page_header': "Purchase Detail",
+        'page_header': "Purchase Detail ID: %s" % id,
         'purchase': purchase
     }
 

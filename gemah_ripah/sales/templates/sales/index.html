@@ -1,17 +1,26 @@
-{% extends "base.html" %}
+{% extends "sales/base.html" %}
 
 {% load humanize %}
 
 {% block content %}
 {% if sales_list %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">{{  message.level }}:</span>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <table class="table table-condensed table-striped table-bordered table-hover">
         <thead>
             <tr>
                 <th>#</th>
                 <th>Date</th>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
+                <th>Net Income</th>
+                <th>Total Items</th>
             </tr>
         </thead>
         <tbody>
@@ -19,9 +28,8 @@
             <tr>
                 <td>{{ forloop.counter }}.</td>
                 <td>{{ sales.date }}</td>
-                <td>{{ sales.product }}</td>
-                <td class="text-right">{{ sales.price|intcomma }}</td>
-                <td class="text-right">{{ sales.quantity }}</td>
+                <td class="text-right">{{ sales.net_income|intcomma }}</td>
+                <td class="text-right">{{ sales.total_items }}</td>
             </tr>
             {% endfor %}
         </tbody>

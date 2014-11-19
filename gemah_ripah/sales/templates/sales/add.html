@@ -1,4 +1,4 @@
-{% extends "purchase/base.html" %}
+{% extends "sales/base.html" %}
 
 {% load humanize %}
 {% load widget_tweaks %}
@@ -30,13 +30,6 @@
                     {{ form.date|add_class:"form-control" }}
                 </div>
             </div>
-            <div class="form-group {% if form.supplier.errors %} has-error {% endif %}">
-                <label class="col-sm-3 control-label" for="{{ form.supplier.auto_id }}">{{ form.supplier.label }}</label>
-                <div class="col-sm-4">
-                    {{ form.supplier.errors }}
-                    {{ form.supplier|add_class:"form-control" }}
-                </div>
-            </div>
             <div class="form-group {% if form.discount.errors %} has-error {% endif %}">
                 <label class="col-sm-3 control-label" for="{{ form.discount.auto_id }}">{{ form.discount.label }}</label>
                 <div class="col-sm-4">
@@ -48,8 +41,8 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <fieldset class="purchase-items">
-                <legend>Purchase Items (Gross Expenses: <span id="total-expenses">0</span>)</legend>
+            <fieldset class="sales-items">
+                <legend>Sales Items (Gross Income: <span id="total-expenses">0</span>)</legend>
 
                 {% if formset.non_form_errors %}
                 <div class="alert alert-danger" role="alert">
@@ -122,27 +115,27 @@ $(document).ready(function(){
         $("#id_date").datepicker("hide");
     });
 
-    $(".purchase-items input").on("blur", function(){
-        var totalExpenses = 0;
-        $(".purchase-items tr").each(function(){
+    $(".sales-items input").on("blur", function(){
+        var totalIncome = 0;
+        $(".sales-items tr").each(function(){
             var price = $(this).find("input[name$='-price']").val();
             var quantity = $(this).find("input[name$='-quantity']").val();
             if( $.isNumeric(price) && $.isNumeric(quantity) ) {
-                totalExpenses += parseFloat(price) * parseFloat(quantity);
+                totalIncome += parseFloat(price) * parseFloat(quantity);
             }
         });
 
-        $("#total-expenses").html(numberWithCommas(totalExpenses));
+        $("#total-income").html(numberWithCommas(totalIncome));
     });
 
 
     function renumberRow(row) {
-        $(".purchase-items tbody tr.dynamic-form").each(function(index){
+        $(".sales-items tbody tr.dynamic-form").each(function(index){
             $(this).find("td:first-child").html( (index + 1) + ".");
         });
     }
 
-    $('.purchase-items tbody tr').formset({
+    $('.sales-items tbody tr').formset({
         prefix: '{{ formset.prefix }}',
         addText: "Add Another Row",
         deleteText: "Remove",

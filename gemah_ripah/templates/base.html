@@ -44,7 +44,7 @@
                     <h1>{{ page_header }}</h1>
                 </div>
                 <div class="col-md-6 col-sm-6">
-                    <div class="text-right">
+                    <div id="sub-menu" class="text-right">
                         {% block sub_menu %}
                         {% endblock %}
                     </div>
@@ -63,6 +63,7 @@
     <script src="{% static 'js/jquery-2.1.1.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
 
     {% block javascript %}
     {% endblock %}

@@ -16,3 +16,8 @@ body {
 .errorlist {
     color: #a94442;
 }
+
+#sub-menu a.btn {
+    margin-top: 1.5em;
+    margin-left: 0.5em;
+}

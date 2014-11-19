@@ -99,3 +99,8 @@ STATICFILES_DIRS = (
 )
 
 LOGIN_REDIRECT_URL = "/products/"
+
+try:
+    from local_settings import *
+except:
+    pass
