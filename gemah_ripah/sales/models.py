@@ -55,21 +55,38 @@ class SalesItem(models.Model):
         return "%s: %d @ %f" % (self.product, self.quantity, self.price)
 
 
+@receiver(models.signals.pre_save, sender=SalesItem)
+def on_pre_save_callback(sender, **kwargs):
+    update_pre_total_sold(kwargs['instance'])
+
+
 @receiver(models.signals.post_save, sender=SalesItem)
-def on_save_callback(sender, **kwargs):
-    update_total_sold(kwargs['instance'].product)
+def on_post_save_callback(sender, **kwargs):
+    update_post_total_sold(kwargs['instance'])
 
 
 @receiver(models.signals.post_delete, sender=SalesItem)
-def on_delete_callback(sender, **kwargs):
-    update_total_sold(kwargs['instance'].product)
+def on_post_delete_callback(sender, **kwargs):
+    update_post_total_sold(kwargs['instance'])
 
 
-def update_total_sold(product):
+def update_pre_total_sold(instance):
+    if instance.id:
+        old_instance = SalesItem.objects.get(pk=instance.id)
+        if old_instance.product.id != instance.product.id:
+            total = 0
+            items = SalesItem.objects.filter(product=old_instance.product).exclude(pk=old_instance.id)
+            for item in items:
+                total += item.quantity
+            old_instance.product.total_sold = total
+            old_instance.product.save()
+
+
+def update_post_total_sold(instance):
     total = 0
-    items = SalesItem.objects.filter(product=product)
+    items = SalesItem.objects.filter(product=instance.product)
     for item in items:
         total += item.quantity
-    product.total_sold = total
+    instance.product.total_sold = total
 
-    product.save()
+    instance.product.save()
