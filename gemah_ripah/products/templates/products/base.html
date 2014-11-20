@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block sub_menu %}
+    <a href="{% url 'products:index' %}" class="btn btn-primary">Back to Index</a>
+    <a href="{% url 'products:add' %}" class="btn btn-primary">Add New Product</a>
+{% endblock %}

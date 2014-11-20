@@ -18,22 +18,30 @@ class Merchant(models.Model):
         return self.name
 
 
+class ProductManager(models.Manager):
+    def active(self):
+        return super(ProductManager, self).get_queryset().filter(is_active=True)
+
+
 class Product(models.Model):
     brand = CharUpperCaseField(max_length=100)
     name = CharUpperCaseField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=1, validators=[MinValueValidator(0)])
-    total_purchased = models.IntegerField(default=0)
-    total_sold = models.IntegerField(default=0)
+    total_purchased = models.IntegerField(default=0, editable=False)
+    total_sold = models.IntegerField(default=0, editable=False)
+    is_active = models.BooleanField(default=True)
     remarks = models.TextField(blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, blank=True, null=True, editable=False)
+
+    objects = ProductManager()
 
     class Meta:
         ordering = ("brand", "name")
         unique_together = ("brand", "name")
 
     def __str__(self):
-        return self.brand  + " - " + self.name
+        return self.brand + " - " + self.name
 
     @property
     def stock(self):

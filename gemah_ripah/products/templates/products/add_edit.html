@@ -1,0 +1,93 @@
+{% extends "products/base.html" %}
+
+{% load humanize %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<form method="post" action="." role="form" class="form-horizontal">
+    {% csrf_token %}
+    {{ form.id }}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">{{ message.level }}:</span>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% for error in form.non_field_errors %}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+            {{ error }} {{ b }}
+    </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-md-8">
+
+            <div class="form-group {% if form.brand.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.brand.auto_id }}">{{ form.brand.label }}</label>
+                <div class="col-sm-4">
+                    {{ form.brand.errors }}
+                    {{ form.brand|add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="form-group {% if form.name.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.name.auto_id }}">{{ form.name.label }}</label>
+                <div class="col-sm-9">
+                    {{ form.name.errors }}
+                    {{ form.name|add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="form-group {% if form.price.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.price.auto_id }}">{{ form.price.label }}</label>
+                <div class="col-sm-4">
+                    {{ form.price.errors }}
+                    {{ form.price|add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="form-group {% if form.is_active.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.is_active.auto_id }}">{{ form.is_active.label }}</label>
+                <div class="col-sm-4 checkbox">
+                    <label>
+                    {{ form.is_active.errors }}
+                    {{ form.is_active }}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group {% if form.remarks.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.remarks.auto_id }}">{{ form.remarks.label }}</label>
+                <div class="col-sm-9">
+                    {{ form.remarks.errors }}
+                    {{ form.remarks|add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-10">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="{% url 'products:index' %}" class="btn btn-primary">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+    $("#id_date").datepicker({
+        format: "yyyy-mm-dd"
+    })
+    .on("changeDate", function(){
+        $("#id_date").datepicker("hide");
+    });
+});
+</script>
+{% endblock %}
