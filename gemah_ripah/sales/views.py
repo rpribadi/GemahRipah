@@ -68,6 +68,53 @@ def add(request):
 
 
 @login_required
+def edit(request, id):
+    sales = get_object_or_404(Sales, pk=id)
+    SalesItemFormSet = inlineformset_factory(
+        Sales,
+        SalesItem,
+        formset=MinimumRequiredFormSet,
+        form=SalesItemForm
+    )
+    if request.method == "POST":
+        form = SalesForm(request.POST, instance=sales)
+        formset = SalesItemFormSet(
+            request.POST,
+            instance=sales,
+            minimum_forms=1,
+            minimum_forms_message="At least 1 Sales item is required."
+        )
+        if form.is_valid() and formset.is_valid():
+            sales = form.save()
+            items = formset.save()
+            for item in items:
+                item.sales = sales
+                item.save()
+            messages.success(request, 'Record has been saved successfully.')
+            return HttpResponseRedirect(".")
+        else:
+            messages.error(request, 'Failed to save record. Please correct the errors below.', extra_tags='danger')
+    else:
+        form = SalesForm(instance=sales)
+        formset = SalesItemFormSet(
+            instance=sales,
+            minimum_forms=1
+        )
+
+    context = {
+        'page_header': "Edit Sales ID: %s" % id,
+        'form': form,
+        'formset': formset
+    }
+
+    return render(
+        request,
+        'sales/edit.html',
+        context
+    )
+
+
+@login_required
 def detail(request, id):
     sales = get_object_or_404(Sales, pk=id)
 

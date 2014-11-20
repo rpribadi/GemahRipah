@@ -2,6 +2,10 @@
 
 {% load humanize %}
 
+{% block sub_menu %}
+    <a href="{% url 'sales:add' %}" class="btn btn-primary">Add New Sales</a>
+{% endblock %}
+
 {% block content %}
 {% if messages %}
     {% for message in messages %}
@@ -33,7 +37,11 @@
                 <td class="text-right">{{ sales.net_income|intcomma }}</td>
                 <td class="text-right">{{ sales.total_items }}</td>
                 <td>{{ sales.remarks }}</td>
-                <td class="text-center"><a href="{% url 'sales:delete' sales.id %}" class="delete">Delete</a></td>
+                <td class="text-center">
+                    <a href="{% url 'sales:edit' sales.id %}">Edit</a>
+                    |
+                    <a href="{% url 'sales:delete' sales.id %}" class="delete">Delete</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

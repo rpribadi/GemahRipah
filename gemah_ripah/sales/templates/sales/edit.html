@@ -73,7 +73,13 @@
                     <tbody>
                         {% for form in formset %}
                         <tr>
-                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                {{ forloop.counter }}
+                                {% for fld in form.hidden_fields %}
+                                    {{ fld }}
+                                {% endfor %}
+                                {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+                            </td>
                             <td class="{% if form.product.errors %} has-error {% endif %}">
                                 {{ form.product.errors }}
                                 {{ form.product|add_class:"form-control" }}
@@ -123,7 +129,7 @@ $(document).ready(function(){
         $("#id_date").datepicker("hide");
     });
 
-    $(".sales-items input").on("blur", function(){
+    function calculateGrossIncome() {
         var totalIncome = 0;
         $(".sales-items tr").each(function(){
             var price = $(this).find("input[name$='-price']").val();
@@ -134,10 +140,15 @@ $(document).ready(function(){
         });
 
         $("#total-income").html(numberWithCommas(totalIncome));
+    }
+
+    $(".sales-items input").on("blur", function(){
+        calculateGrossIncome();
     });
+    calculateGrossIncome();
 
 
-    function renumberRow(row) {
+    function renumberRow() {
         $(".sales-items tbody tr.dynamic-form").each(function(index){
             $(this).find("td:first-child").html( (index + 1) + ".");
         });
@@ -147,11 +158,11 @@ $(document).ready(function(){
         prefix: '{{ formset.prefix }}',
         addText: "Add Another Row",
         deleteText: "Delete",
-        added: function(row) {
-            renumberRow(row);
+        added: function() {
+            renumberRow();
         },
-        deleted: function(row) {
-            renumberRow(row);
+        deleted: function() {
+            renumberRow();
         }
     });
 });
