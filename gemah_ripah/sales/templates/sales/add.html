@@ -60,12 +60,14 @@
                     {% endfor %}
                 </div>
                 {% endif %}
-                <table class="table table-bordered table-striped table-hover">
+                <table class="table table-bordered table-striped table-hover table-vm">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Product</th>
-                            <th>Price</th>
+                            <th>Guided Price</th>
+                            <th>Sell Price</th>
+                            <th>In Stock</th>
                             <th>Quantity</th>
                             <th>Action</th>
                         </tr>
@@ -74,13 +76,23 @@
                         {% for form in formset %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td class="{% if form.product.errors %} has-error {% endif %}">
+                            <td class="product {% if form.product.errors %} has-error {% endif %}">
                                 {{ form.product.errors }}
                                 {{ form.product|add_class:"form-control" }}
                             </td>
-                            <td class="{% if form.price.errors %} has-error {% endif %}">
+                            <td class="guided-price text-right">
+                                {% if form.instance.product %}
+                                {{ form.instance.product.price|intcomma }}
+                                {% endif %}
+                            </td>
+                            <td class="price {% if form.price.errors %} has-error {% endif %}">
                                 {{ form.price.errors }}
                                 {{ form.price|add_class:"form-control" }}
+                            </td>
+                            <td class="stock text-right">
+                                {% if form.instance.product %}
+                                {{ form.instance.product.stock|intcomma }}
+                                {% endif %}
                             </td>
                             <td class="{% if form.quantity.errors %} has-error {% endif %}">
                                 {{ form.quantity.errors }}
@@ -152,6 +164,27 @@ $(document).ready(function(){
         },
         deleted: function(row) {
             renumberRow(row);
+        }
+    });
+
+    $(".sales-items tbody ").on("change", ".product select",function(){
+        var tr = $(this).closest("tr");
+        if( $(this).val() ) {
+            $.get("/products/" + $(this).val()).done(function(product){
+                tr.find("td.guided-price").html(numberWithCommas(product.price));
+                tr.find("td.stock").html(numberWithCommas(product.stock));
+
+                if( !tr.find("td.price input").val() ) {
+                    tr.find("td.price input").val(product.price);
+                }
+                else {
+                    tr.find("td.price input").val("");
+                }
+            });
+        }
+        else {
+            tr.find("td.guided-price").html("");
+            tr.find("td.stock").html("");
         }
     });
 });

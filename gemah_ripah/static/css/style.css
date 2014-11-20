@@ -25,3 +25,7 @@ body {
 .page-header.main-header {
     margin-top: 0;
 }
+
+table.table-vm > tbody > tr > td {
+    vertical-align: middle !important;
+}

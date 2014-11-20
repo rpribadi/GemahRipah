@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 
 from forms import ProductForm
@@ -51,3 +51,16 @@ def add_edit(request, id=None):
         'products/add_edit.html',
         context
     )
+
+
+@login_required
+def detail(request, id):
+    obj = get_object_or_404(Product, pk=id)
+
+    if request.is_ajax():
+        return JsonResponse({
+            'id': obj.id,
+            'name': obj.name,
+            'price': obj.price,
+            'stock': obj.stock,
+        })
