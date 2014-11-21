@@ -1,0 +1,56 @@
+{% extends "merchants/base.html" %}
+
+{% load humanize %}
+
+{% block sub_menu %}
+    <a href="{% url 'merchants:add' %}" class="btn btn-primary">Add New Merchant</a>
+{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">{{  message.level }}:</span>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if merchant_list %}
+        <table class="table table-condensed table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Code</th>
+                    <th class="col-md-6">Name</th>
+                    <th>Is Active</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in merchant_list %}
+                <tr>
+                    <td>{{ forloop.counter }}.</td>
+                    <td>{{ item.code }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.is_active }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'merchants:edit' item.id %}">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No merchants are available.</p>
+    {% endif %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+
+});
+</script>
+{% endblock %}

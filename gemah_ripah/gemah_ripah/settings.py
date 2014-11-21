@@ -43,7 +43,8 @@ INSTALLED_APPS = (
     'products',
     'purchase',
     'sales',
-    'other_expenses'
+    'other_expenses',
+    'merchants'
 )
 
 MIDDLEWARE_CLASSES = (
