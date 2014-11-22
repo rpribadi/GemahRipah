@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 from forms import MerchantForm
-from products.models import Merchant
+from models import Merchant
 
 
 @login_required

@@ -73,6 +73,8 @@
             $('a.delete').click(function(e){
                 return confirm("Are you sure to delete this record?");
             });
+
+            $('[data-toggle="popover"]').popover();
         });
     </script>
     {% block javascript %}

@@ -3,7 +3,8 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.dispatch import receiver
 
-from products.models import Merchant, Product
+from merchants.models import Merchant
+from products.models import Product
 
 
 class Purchase(models.Model):
@@ -57,7 +58,6 @@ class PurchaseItem(models.Model):
 
 @receiver(models.signals.pre_save, sender=PurchaseItem)
 def on_pre_save_callback(sender, **kwargs):
-    print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
     update_pre_total_purchased(kwargs['instance'])
 
 
