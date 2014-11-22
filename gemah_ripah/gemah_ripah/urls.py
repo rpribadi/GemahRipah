@@ -2,8 +2,10 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.views.generic import RedirectView
 
+
 urlpatterns = patterns('',
-    url(r'^$', RedirectView.as_view(pattern_name='products:index')),
+    url(r'^$', RedirectView.as_view(pattern_name='dashboard')),
+    url(r'^dashboard/$', 'dashboard.views.index', name='dashboard'),
 
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'accounts/login.html'}, name="login"),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),

@@ -40,6 +40,7 @@ INSTALLED_APPS = (
 
     'widget_tweaks',
 
+    'dashboard',
     'products',
     'purchase',
     'sales',
@@ -100,7 +101,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-LOGIN_REDIRECT_URL = "/products/"
+LOGIN_REDIRECT_URL = "/"
 
 try:
     from local_settings import *
