@@ -11,8 +11,9 @@ from products.models import Product
 def home(request):
     latest = Product.objects.latest('last_modified')
     context = {
-        'page_header': "Product",
-        'product_list': Product.objects.all(),
+        'page_title': ': Product List',
+        'page_header': "Product List",
+        'product_list': Product.objects.filter(is_active=True, total_purchased__gt=0),
         'latest_product': latest
     }
 
@@ -24,7 +25,7 @@ def home(request):
 
 def contact_us(request):
     context = {
-        'page_header': "Contact Us",
+        'page_header': ": Contact Us",
     }
 
     return render(
