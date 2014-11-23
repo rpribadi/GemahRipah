@@ -28,7 +28,8 @@
                 <th>#</th>
                 <th>Brand</th>
                 <th>Product</th>
-                <th>Price</th>
+                <th>Buy Price</th>
+                <th>Sell Price</th>
                 <th>Stock</th>
                 <th>Action</th>
             </tr>
@@ -47,7 +48,8 @@
 
                     {{ product.name }}
                 </td>
-                <td class="text-right">{{ product.price|intcomma }}</td>
+                <td class="text-right">{{ product.buy_price|floatformat:0|intcomma }}</td>
+                <td class="text-right">{{ product.price|floatformat:0|intcomma }}</td>
                 <td class="text-right">{{ product.stock }}</td>
                 <td class="text-center">
                     <a href="{% url 'products:edit' product.id %}" class="">Edit</a>

@@ -10,9 +10,14 @@ from models import Product
 
 @login_required
 def index(request):
+    product_list = Product.objects.all()
+    for product in product_list:
+        latest = product.purchaseitem_set.all().order_by('-purchase__date', '-id')
+        if latest:
+            product.buy_price = latest[0].price
     context = {
         'page_header': "Products",
-        'product_list': Product.objects.all()
+        'product_list': product_list
     }
 
     return render(
