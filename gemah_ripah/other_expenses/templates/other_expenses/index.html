@@ -34,7 +34,7 @@
                     <td>{{ forloop.counter }}.</td>
                     <td>{{ item.date }}</td>
                     <td>{{ item.remarks }}</td>
-                    <td class="text-right">{{ item.amount|intcomma }}</td>
+                    <td class="text-right">{{ item.amount|floatformat:0|intcomma }}</td>
                     <td class="text-center">
                         <a href="{% url 'other_expenses:edit' item.id %}">Edit</a>
                         |

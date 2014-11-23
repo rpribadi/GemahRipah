@@ -1,0 +1,43 @@
+{% extends "shop/base.html" %}
+
+{% load humanize %}
+
+{% block content %}
+{% if product_list %}
+    <h4>Product last updated @ {{ latest_product.last_modified }}</h4>
+    <p>
+        <span class="legend-item out-of-stock"></span> Out of stock
+    </p>
+    <table class="table table-condensed table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Brand</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>In Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in product_list %}
+            <tr class="{% if product.is_out_of_stock %}out-of-stock{% endif %}">
+                <td>{{ forloop.counter }}.</td>
+                <td>{{ product.brand }}</td>
+                <td>{{ product.name }}</td>
+                <td class="text-right">{{ product.price|floatformat:0|intcomma }}</td>
+                <td class="text-right">{{ product.stock }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No products are available.</p>
+{% endif %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+});
+</script>
+{% endblock %}

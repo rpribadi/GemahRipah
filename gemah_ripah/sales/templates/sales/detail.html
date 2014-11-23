@@ -19,15 +19,15 @@
                     </tr>
                     <tr>
                         <td>Gross Income</td>
-                        <td>{{ sales.gross_income|intcomma }}</td>
+                        <td>{{ sales.gross_income|floatformat:0|intcomma }}</td>
                     </tr>
                     <tr>
                         <td>Discount</td>
-                        <td>{{ sales.discount|intcomma }}</td>
+                        <td>{{ sales.discount|floatformat:0|intcomma }}</td>
                     </tr>
                     <tr>
                         <td><strong>Net Income</strong></td>
-                        <td><mark><strong>{{ sales.net_income|intcomma }}</strong></mark></td>
+                        <td><mark><strong>{{ sales.net_income|floatformat:0|intcomma }}</strong></mark></td>
                     </tr>
                     {% if sales.remarks %}
                     <tr>
@@ -61,7 +61,7 @@
                         <tr>
                             <td>{{ forloop.counter }}.</td>
                             <td>{{ item.product }}</td>
-                            <td class="text-right">{{ item.price|intcomma }}</td>
+                            <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
                             <td class="text-right">{{ item.quantity|intcomma }}</td>
                         </tr>
                     {% endfor %}

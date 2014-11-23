@@ -51,7 +51,7 @@ def index(request):
             'total_income': int(total_income),
             'profit': int(total_income - (total_product_expenses + other_expenses))
         },
-        'latest_sold_items': SalesItem.objects.all().order_by('-sales__date')[:10],
+        'latest_sold_items': SalesItem.objects.select_related('sales', 'product').order_by('-sales__date')[:10],
         'popular_products': Product.objects.filter(total_sold__gte=0).order_by('-total_sold', 'name')[:10]
     }
 

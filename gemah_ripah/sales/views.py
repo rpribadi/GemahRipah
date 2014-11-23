@@ -1,3 +1,4 @@
+from django.db import models
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -116,7 +117,9 @@ def edit(request, id):
 
 @login_required
 def detail(request, id):
-    sales = get_object_or_404(Sales, pk=id)
+    sales = get_object_or_404(Sales.objects.prefetch_related(
+        models.Prefetch('salesitem_set', queryset=SalesItem.objects.select_related('product'))
+    ), pk=id)
 
     context = {
         'page_header': "Sales Detail ID: %s" % id,

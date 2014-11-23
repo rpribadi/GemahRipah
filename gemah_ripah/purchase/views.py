@@ -1,3 +1,4 @@
+from django.db import models
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -14,7 +15,7 @@ from models import Purchase, PurchaseItem
 def index(request):
     context = {
         'page_header': "Purchase",
-        'purchase_list': Purchase.objects.all()
+        'purchase_list': Purchase.objects.select_related('supplier')
     }
 
     return render(
@@ -119,7 +120,9 @@ def edit(request, id):
 
 @login_required
 def detail(request, id):
-    purchase = get_object_or_404(Purchase, pk=id)
+    purchase = get_object_or_404(Purchase.objects.prefetch_related(
+        models.Prefetch('purchaseitem_set', queryset=PurchaseItem.objects.select_related('product'))
+    ), pk=id)
 
     context = {
         'page_header': "Purchase Detail ID: %s" % id,

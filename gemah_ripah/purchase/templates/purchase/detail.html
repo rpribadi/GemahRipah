@@ -23,15 +23,15 @@
                     </tr>
                     <tr>
                         <td>Gross Expenses</td>
-                        <td>{{ purchase.gross_expenses|intcomma }}</td>
+                        <td>{{ purchase.gross_expenses|floatformat:0|intcomma }}</td>
                     </tr>
                     <tr>
                         <td>Discount</td>
-                        <td>{{ purchase.discount|intcomma }}</td>
+                        <td>{{ purchase.discount|floatformat:0|intcomma }}</td>
                     </tr>
                     <tr>
                         <td><strong>Net Expenses</strong></td>
-                        <td><mark><strong>{{ purchase.net_expenses|intcomma }}</strong></mark></td>
+                        <td><mark><strong>{{ purchase.net_expenses|floatformat:0|intcomma }}</strong></mark></td>
                     </tr>
                     {% if purchase.remarks %}
                     <tr>
@@ -65,7 +65,7 @@
                         <tr>
                             <td>{{ forloop.counter }}.</td>
                             <td>{{ item.product }}</td>
-                            <td class="text-right">{{ item.price|intcomma }}</td>
+                            <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
                             <td class="text-right">{{ item.quantity|intcomma }}</td>
                         </tr>
                     {% endfor %}

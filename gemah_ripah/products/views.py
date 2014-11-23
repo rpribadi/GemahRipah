@@ -1,20 +1,25 @@
+from django.db import models
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 
+from purchase.models import Purchase, PurchaseItem
 from forms import ProductForm
 from models import Product
 
 
 @login_required
 def index(request):
-    product_list = Product.objects.all()
+    product_list = Product.objects.all().prefetch_related(
+        models.Prefetch('purchaseitem_set', queryset=PurchaseItem.objects.select_related('purchase').order_by('-purchase__date', '-id'))
+    )
+
     for product in product_list:
-        latest = product.purchaseitem_set.all().order_by('-purchase__date', '-id')
-        if latest:
-            product.buy_price = latest[0].price
+        if product.purchaseitem_set.all().count():
+            product.buy_price = product.purchaseitem_set.all()[0].price
+
     context = {
         'page_header': "Products",
         'product_list': product_list

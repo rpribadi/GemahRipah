@@ -20,11 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'xgcs*^6l1mssm5!zijy9en#@$=8)3x$u%y5^2rv=s-pf*dz1%#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['gemahripah.net']
 
 
 # Application definition
@@ -38,8 +38,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 
+    'debug_toolbar',
     'widget_tweaks',
 
+    'shop',
     'dashboard',
     'products',
     'purchase',
@@ -103,7 +105,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/admin/dashboard/"
 
 try:
     from local_settings import *
