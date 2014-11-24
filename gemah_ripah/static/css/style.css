@@ -30,6 +30,10 @@ table.table-vm > tbody > tr > td {
     vertical-align: middle !important;
 }
 
+body.shop {
+    padding-bottom: 70px;
+}
+
 body.shop .out-of-stock {
     background-color: #f9f2f4 !important;
     color: #c7254e !important;
@@ -37,4 +41,27 @@ body.shop .out-of-stock {
 
 body.shop .legend-item.out-of-stock {
     background-color: #c7254e !important;
+}
+
+
+body.shop footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-top: 15px;
+    background-color: #f5f5f5;
+}
+
+
+body.shop .navbar-brand{
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+body.shop .navbar-brand .small-info{
+    position: absolute;
+    bottom: 3px;
+    font-weight: normal;
+    font-size:0.63em;
+    color: #999;
 }
