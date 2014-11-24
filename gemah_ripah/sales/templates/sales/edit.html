@@ -181,13 +181,16 @@ $(document).ready(function(){
     $(".sales-items tbody ").on("change", ".product select",function(){
         var tr = $(this).closest("tr");
         if( $(this).val() ) {
-            $.get("/products/" + $(this).val()).done(function(product){
+            tr.find("input, select").prop("disabled", true);
+            $.get("/admin/products/" + $(this).val()).done(function(product){
                 tr.find("td.guided-price").html(numberWithCommas(product.price));
                 tr.find("td.stock").html(numberWithCommas(product.stock));
 
                 if( !tr.find("td.price input").val() ) {
                     tr.find("td.price input").val(product.price);
                 }
+            }).always(function(){
+                tr.find("input, select").prop("disabled", false);
             });
         }
         else {
