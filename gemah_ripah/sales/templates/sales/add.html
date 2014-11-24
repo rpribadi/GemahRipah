@@ -167,10 +167,13 @@ $(document).ready(function(){
         }
     });
 
+    var loader = $("<span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span>");
+
     $(".sales-items tbody ").on("change", ".product select",function(){
         var tr = $(this).closest("tr");
         if( $(this).val() ) {
-            tr.find("input, select").prop("disabled", true);
+            tr.find("td.guided-price").html(loader.clone());
+            tr.find("td.stock").html(loader.clone());
             $.get("/admin/products/" + $(this).val()).done(function(product){
                 tr.find("td.guided-price").html(numberWithCommas(product.price));
                 tr.find("td.stock").html(numberWithCommas(product.stock));
@@ -181,8 +184,9 @@ $(document).ready(function(){
                 else {
                     tr.find("td.price input").val("");
                 }
-            }).always(function(){
-                tr.find("input, select").prop("disabled", false);
+            }).fail(function(){
+                tr.find("td.guided-price").html("");
+                tr.find("td.stock").html("");
             });
         }
         else {
