@@ -19,6 +19,7 @@ def index(request):
     for product in product_list:
         if product.purchaseitem_set.all().count():
             product.buy_price = product.purchaseitem_set.all()[0].price
+            product.margin = product.price - product.buy_price
 
     context = {
         'page_header': "Products",

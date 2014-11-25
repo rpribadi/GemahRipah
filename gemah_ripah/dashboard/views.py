@@ -38,6 +38,12 @@ def index(request):
     total_product_expenses = (purchase_items - purchase)
     total_income = (sales_items - sales)
 
+    out_of_stock_list = Product.objects.extra(
+        where=["total_sold >= total_purchased",]
+    ).filter(
+        is_active=True, total_purchased__gt=0
+    ).order_by('name')
+
     context = {
         'page_header': "Summaries",
         'inventory': {
@@ -51,8 +57,9 @@ def index(request):
             'total_income': int(total_income),
             'profit': int(total_income - (total_product_expenses + other_expenses))
         },
-        'latest_sold_items': SalesItem.objects.select_related('sales', 'product').order_by('-sales__date')[:10],
-        'popular_products': Product.objects.filter(total_sold__gte=0).order_by('-total_sold', 'name')[:10]
+        'latest_sold_items': SalesItem.objects.select_related('sales', 'product').order_by('-sales__date')[:20],
+        'popular_products': Product.objects.filter(total_sold__gt=0).order_by('-total_sold', 'name')[:20],
+        'out_of_stock_list': out_of_stock_list
     }
 
     return render(

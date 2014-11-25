@@ -102,6 +102,31 @@
         <p>No popular products yet.</p>
         {% endif %}
     </div>
+    <div class="col-sm-7">
+        <h3>Out of Stock Products</h3>
+        {% if out_of_stock_list %}
+        <table class="table table-bordered table-hover table-striped table-condensed">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in out_of_stock_list %}
+            <tr>
+                <td>{{ forloop.counter }}.</td>
+                <td>{{ item.name }}</td>
+                <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No products are out of stock yet.</p>
+        {% endif %}
+    </div>
 </div>
 
 {% endblock %}
