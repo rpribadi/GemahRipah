@@ -15,7 +15,9 @@ from models import Sales, SalesItem
 def index(request):
     context = {
         'page_header': "Sales",
-        'sales_list': Sales.objects.all()
+        'sales_list': Sales.objects.all().prefetch_related(
+            models.Prefetch("salesitem_set", queryset=SalesItem.objects.select_related("product").order_by('product__name'))
+        )
     }
 
     return render(

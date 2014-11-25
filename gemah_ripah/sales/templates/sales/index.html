@@ -22,9 +22,9 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th class="col-xs-2">Date</th>
-                <th class="col-xs-2">Net Income</th>
-                <th class="col-xs-2">Total Items</th>
+                <th>Date</th>
+                <th>Net Income</th>
+                <th class="">Items</th>
                 <th>Remarks</th>
                 <th class="col-xs-1">Action</th>
             </tr>
@@ -33,9 +33,16 @@
             {% for sales in sales_list %}
             <tr>
                 <td>{{ forloop.counter }}.</td>
-                    <td><a href="{% url 'sales:detail' sales.id %}">{{ sales.date }}</a></td>
+                <td><a href="{% url 'sales:detail' sales.id %}">{{ sales.date }}</a></td>
                 <td class="text-right">{{ sales.net_income|floatformat:0|intcomma }}</td>
-                <td class="text-right">{{ sales.total_items }}</td>
+                <td>
+                    {% for item in sales.salesitem_set.all %}
+                    ({{ item.quantity }}) - {{ item.product.name }}
+                    {% if not forloop.last %}
+                    <br />
+                    {% endif %}
+                    {% endfor %}
+                </td>
                 <td>{{ sales.remarks }}</td>
                 <td class="text-center">
                     <a href="{% url 'sales:edit' sales.id %}">Edit</a>
