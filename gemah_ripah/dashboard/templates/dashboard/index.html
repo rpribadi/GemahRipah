@@ -110,6 +110,7 @@
             <tr>
                 <th>#</th>
                 <th>Product</th>
+                <th>Total Sold</th>
                 <th>Price</th>
             </tr>
             </thead>
@@ -118,6 +119,7 @@
             <tr>
                 <td>{{ forloop.counter }}.</td>
                 <td>{{ item.name }}</td>
+                <td>{{ item.total_sold }}</td>
                 <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
             </tr>
             {% endfor %}
