@@ -37,7 +37,7 @@
                 <td class="text-right">{{ sales.net_income|floatformat:0|intcomma }}</td>
                 <td>
                     {% for item in sales.salesitem_set.all %}
-                    ({{ item.quantity }}) - {{ item.product.name }}
+                    ({{ item.quantity }}) - <a href="{% url 'products:detail' item.product.id %}">{{ item.product.name }}</a>
                     {% if not forloop.last %}
                     <br />
                     {% endif %}

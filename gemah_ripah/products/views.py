@@ -66,12 +66,27 @@ def add_edit(request, id=None):
 
 @login_required
 def detail(request, id):
-    obj = get_object_or_404(Product, pk=id)
+    product = get_object_or_404(Product, pk=id)
 
     if request.is_ajax():
         return JsonResponse({
-            'id': obj.id,
-            'name': obj.name,
-            'price': obj.price,
-            'stock': obj.stock,
+            'id': product.id,
+            'name': product.name,
+            'price': product.price,
+            'stock': product.stock,
         })
+
+    if product.purchaseitem_set.all().count():
+        product.buy_price = product.purchaseitem_set.all()[0].price
+        product.margin = product.price - product.buy_price
+
+    context = {
+        'page_header': "Product Detail ID: %s" % product.id,
+        'product': product,
+    }
+
+    return render(
+        request,
+        'products/detail.html',
+        context
+    )

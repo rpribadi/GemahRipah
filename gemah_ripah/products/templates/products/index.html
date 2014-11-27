@@ -47,7 +47,7 @@
                     </button>
                     {% endif %}
 
-                    {{ product.name }}
+                    <a href="{% url 'products:detail' product.id %}">{{ product.name }}</a>
                 </td>
                 <td class="text-right">{{ product.buy_price|floatformat:0|intcomma }}</td>
                 <td class="text-right">{{ product.price|floatformat:0|intcomma }}</td>
