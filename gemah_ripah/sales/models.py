@@ -49,7 +49,7 @@ class SalesItem(models.Model):
     modified_by = models.ForeignKey(User, editable=False)
 
     class Meta:
-        ordering = ('product__name', )
+        ordering = ('-sales__date', 'product__name', '-id')
 
     def __str__(self):
         return "%s: %d @ %f" % (self.product, self.quantity, self.price)
