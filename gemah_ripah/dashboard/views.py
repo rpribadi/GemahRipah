@@ -13,7 +13,7 @@ from sales.models import Sales, SalesItem
 
 @login_required
 def index(request):
-    purchase = Purchase.objects.aggregate(Sum('discount'))
+    purchase = Purchase.objects.aggregate(Sum('discount'), Sum('other_expenses'))
     purchase_items = PurchaseItem.objects.aggregate(
         total=Sum('price', field="price*quantity")
     )
@@ -23,7 +23,9 @@ def index(request):
         total=Sum('price', field="price*quantity")
     )
 
-    purchase = purchase['discount__sum'] if purchase['discount__sum'] else 0
+    purchase_other_expenses = purchase['other_expenses__sum'] if purchase['other_expenses__sum'] else 0
+    purchase_discount = purchase['discount__sum'] if purchase['discount__sum'] else 0
+
     sales = sales['discount__sum'] if sales['discount__sum'] else 0
     purchase_items = purchase_items['total'] if purchase_items['total'] else 0
     sales_items = sales_items['total'] if sales_items['total'] else 0
@@ -35,7 +37,7 @@ def index(request):
     inventory['total_purchased__sum'] = inventory['total_purchased__sum'] if inventory['total_purchased__sum'] else 0
     inventory['total_sold__sum'] = inventory['total_sold__sum'] if inventory['total_sold__sum'] else 0
 
-    total_product_expenses = (purchase_items - purchase)
+    total_product_expenses = (purchase_items + purchase_other_expenses - purchase_discount)
     total_income = (sales_items - sales)
 
     out_of_stock_list = Product.objects.extra(
