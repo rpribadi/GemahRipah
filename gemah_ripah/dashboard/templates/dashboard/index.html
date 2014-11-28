@@ -64,7 +64,14 @@
             <tr>
                 <td>{{ forloop.counter }}.</td>
                 <td>{{ item.sales.date }}</td>
-                <td>{{ item.product }}</td>
+                <td>
+                    {% if item.product.remarks %}
+                    <button type="button" class="pops btn btn-danger btn-xs" aria-label="Left Align" data-toggle="popover" title="Remarks" data-trigger="focus" data-content="{{ item.product.remarks }}">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                    </button>
+                    {% endif %}
+                    <a href="{% url 'products:detail' item.product.id %}">{{ item.product }}</a>
+                </td>
                 <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
                 <td class="text-right">{{ item.quantity|intcomma }}</td>
             </tr>
@@ -91,7 +98,14 @@
             {% for item in popular_products %}
             <tr>
                 <td>{{ forloop.counter }}.</td>
-                <td>{{ item.name }}</td>
+                <td>
+                    {% if item.remarks %}
+                    <button type="button" class="pops btn btn-danger btn-xs" aria-label="Left Align" data-toggle="popover" title="Remarks" data-trigger="focus" data-content="{{ item.remarks }}">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                    </button>
+                    {% endif %}
+                    <a href="{% url 'products:detail' item.id %}">{{ item.name }}</a>
+                </td>
                 <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
                 <td class="text-right">{{ item.total_sold|intcomma }}</td>
             </tr>
@@ -118,7 +132,14 @@
             {% for item in out_of_stock_list %}
             <tr>
                 <td>{{ forloop.counter }}.</td>
-                <td>{{ item.name }}</td>
+                <td>
+                    {% if item.remarks %}
+                    <button type="button" class="pops btn btn-danger btn-xs" aria-label="Left Align" data-toggle="popover" title="Remarks" data-trigger="focus" data-content="{{ item.remarks }}">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                    </button>
+                    {% endif %}
+                    <a href="{% url 'products:detail' item.id %}">{{ item.name }}</a>
+                </td>
                 <td>{{ item.total_sold }}</td>
                 <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
             </tr>

@@ -37,6 +37,13 @@
                     {{ form.supplier|add_class:"form-control" }}
                 </div>
             </div>
+            <div class="form-group {% if form.other_expenses.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.other_expenses.auto_id }}">{{ form.other_expenses.label }}</label>
+                <div class="col-sm-4">
+                    {{ form.other_expenses.errors }}
+                    {{ form.other_expenses|add_class:"form-control" }}
+                </div>
+            </div>
             <div class="form-group {% if form.discount.errors %} has-error {% endif %}">
                 <label class="col-sm-3 control-label" for="{{ form.discount.auto_id }}">{{ form.discount.label }}</label>
                 <div class="col-sm-4">

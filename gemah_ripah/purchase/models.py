@@ -10,6 +10,7 @@ from products.models import Product
 class Purchase(models.Model):
     supplier = models.ForeignKey(Merchant)
     date = models.DateField()
+    other_expenses = models.DecimalField(max_digits=10, decimal_places=1, default=0)
     discount = models.DecimalField(max_digits=10, decimal_places=1, default=0)
     remarks = models.TextField(blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True, editable=False)
@@ -22,12 +23,19 @@ class Purchase(models.Model):
         return "%s: %s" % (self.date, self.supplier)
 
     @property
-    def gross_expenses(self):
-        total_expenses = 0
-        for item in self.purchaseitem_set.all():
-            total_expenses += (item.price * item.quantity)
+    def product_expenses(self):
+        if hasattr(self, '_product_expenses'):
+            return self._product_expenses
 
-        return total_expenses
+        self._product_expenses = 0
+        for item in self.purchaseitem_set.all():
+            self._product_expenses += (item.price * item.quantity)
+
+        return self._product_expenses
+
+    @property
+    def gross_expenses(self):
+        return self.product_expenses + self.other_expenses
 
     @property
     def total_items(self):

@@ -60,7 +60,14 @@
                     {% for item in sales.salesitem_set.all %}
                         <tr>
                             <td>{{ forloop.counter }}.</td>
-                            <td>{{ item.product }}</td>
+                            <td>
+                                {% if item.product.remarks %}
+                                <button type="button" class="pops btn btn-danger btn-xs" aria-label="Left Align" data-toggle="popover" title="Remarks" data-trigger="focus" data-content="{{ item.product.remarks }}">
+                                    <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                                </button>
+                                {% endif %}
+                                <a href="{% url 'products:detail' item.product.id %}">{{ item.product }}</a>
+                            </td>
                             <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
                             <td class="text-right">{{ item.quantity|intcomma }}</td>
                         </tr>

@@ -37,7 +37,15 @@
                 <td class="text-right">{{ sales.net_income|floatformat:0|intcomma }}</td>
                 <td>
                     {% for item in sales.salesitem_set.all %}
-                    ({{ item.quantity }}) - <a href="{% url 'products:detail' item.product.id %}">{{ item.product.name }}</a>
+                    ({{ item.quantity }}) -
+
+                    {% if item.product.remarks %}
+                    <button type="button" class="pops btn btn-danger btn-xs" aria-label="Left Align" data-toggle="popover" title="Remarks" data-trigger="focus" data-content="{{ item.product.remarks }}">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                    </button>
+                    {% endif %}
+
+                    <a href="{% url 'products:detail' item.product.id %}">{{ item.product.name }}</a>
                     {% if not forloop.last %}
                     <br />
                     {% endif %}
