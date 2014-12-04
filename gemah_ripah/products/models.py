@@ -54,7 +54,7 @@ class ProductComparison(models.Model):
         unique_together = ("seller", "name")
 
     def __str__(self):
-        return "%s: %s: %s" % (self.seller, self.product, self.current_price)
+        return "%s: %s: %s" % (self.seller, self.name, self.current_price)
 
     @property
     def current_price(self):

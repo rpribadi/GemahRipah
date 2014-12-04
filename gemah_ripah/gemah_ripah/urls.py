@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^admin/purchase/', include('purchase.urls', namespace="purchase")),
     url(r'^admin/other-expenses/', include('other_expenses.urls', namespace="other_expenses")),
     url(r'^admin/merchants/', include('merchants.urls', namespace="merchants")),
+    url(r'^admin/comparisons/', include('comparisons.urls', namespace="comparisons")),
 
     url(r'^secured/', include(admin.site.urls)),
 )
