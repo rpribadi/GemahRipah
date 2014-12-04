@@ -80,12 +80,14 @@ def detail(request, id):
         product.buy_price = product.purchaseitem_set.all()[0].price
         product.margin = product.price - product.buy_price
 
+    comparison_list = product.productcomparison_set.all().select_related('seller').order_by('-last_modified')
     sales_list = product.salesitem_set.all().select_related("sales").order_by('-sales__date')
     purchase_list = product.purchaseitem_set.all().select_related("purchase", "purchase__supplier").order_by('-purchase__date')
 
     context = {
         'page_header': "Product Detail ID: %s" % product.id,
         'product': product,
+        'comparison_list': comparison_list,
         'purchase_list': purchase_list,
         'sales_list': sales_list
     }

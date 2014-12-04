@@ -39,7 +39,21 @@
                     </tr>
                     <tr>
                         <td>Sell Price</td>
-                        <td>{{ product.price|floatformat:0|intcomma }}</td>
+                        <td>
+                            {{ product.price|floatformat:0|intcomma }}
+                            {% if comparison_list %}
+                            <h5><u>Comparisons</u></h5>
+                            <table class="table table-bordered table-condensed">
+                                {% for comparison in comparison_list %}
+                                <tr>
+                                    <td>{{ comparison.seller.code }} {% if comparison.is_on_promotion %}<em class="text-muted">(promo)</em>{% endif %}</td>
+                                    <td class="text-right">{{ comparison.current_price|floatformat:0|intcomma }}</td>
+                                    <td>{{ comparison.last_modified|date:"d M" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr class="info">
                         <td><strong>Margin</strong></td>
