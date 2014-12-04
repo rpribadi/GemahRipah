@@ -9,7 +9,7 @@ from django.shortcuts import render, get_object_or_404
 
 from products.models import Product, ProductComparison
 
-SIMILARITY_THRESHOLD = 0.8
+SIMILARITY_THRESHOLD = 0.7
 
 
 @login_required
