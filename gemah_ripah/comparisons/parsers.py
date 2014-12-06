@@ -29,7 +29,7 @@ def parse_RS(seller, raw_json):
     for index, row in enumerate(rows):
         name = row.find(class_="name").get_text().strip()
         name = name.upper().replace("GR.","GR").strip()
-        name = re.sub(" \*.*\*", "", name.upper())
+        name = re.sub(" \*.*\*", "", name.upper()).strip()
 
         if row.find(class_="price-old"):
             price = row.find(class_="price-old").get_text().strip()

@@ -9,6 +9,7 @@ from django.shortcuts import render, get_object_or_404
 
 from forms import ComparisonForm
 from comparisons import parsers
+from merchants.models import Merchant
 from products.models import Product, ProductComparison
 
 SIMILARITY_THRESHOLD = 0.7
@@ -16,8 +17,9 @@ SIMILARITY_THRESHOLD = 0.7
 
 @login_required
 def index(request):
-    product_list = Product.objects.all()
+    product_list = Product.objects.filter(is_active=True)
     comparison_list = ProductComparison.objects.all().select_related('product', 'seller')
+    merchant_list = Merchant.objects.filter(is_active=True)
 
     for product in product_list:
         product.comparison_list = []
@@ -48,7 +50,8 @@ def index(request):
     context = {
         'page_title': ': Product List',
         'page_header': "Product List",
-        'product_list': product_list
+        'product_list': product_list,
+        'merchant_list': merchant_list
     }
 
     return render(

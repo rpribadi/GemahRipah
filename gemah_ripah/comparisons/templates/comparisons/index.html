@@ -18,6 +18,16 @@
     {% endif %}
 
     {% if product_list %}
+        <p>
+        <form class="form-inline">
+            Show <strong>Available Choices</strong> from:
+            {% for merchant in merchant_list %}
+            <div class="checkbox">
+                <input type="checkbox" name="merchant" value="{{ merchant.code }}" checked> {{ merchant.code }}
+            </div>
+            {% endfor %}
+        </form>
+        </p>
         <table class="table table-condensed table-striped table-bordered table-hover">
             <thead>
                 <tr>
@@ -53,7 +63,7 @@
                                     <legend><small>Available Choices:</small></legend>
                                     <table class="table table-condensed table-striped table-bordered">
                                         {% for comparison in item.comparison_list %}
-                                        <tr>
+                                        <tr class="{{ comparison.seller.code }}">
                                             <td class="text-right">{{ comparison.ratio|floatformat:2|intcomma }}</td>
                                             <td>{{ comparison.seller.code }}</td>
                                             <td>{{ comparison.name }}</td>
@@ -75,6 +85,12 @@
     {% else %}
         <p>No product comparisons are available.</p>
     {% endif %}
+
+<style>
+    div.checkbox {
+        margin-left: 15px;
+    }
+</style>
 {% endblock %}
 
 {% block javascript %}
@@ -115,6 +131,15 @@ $(document).ready(function(){
         });
     });
 
+    $("input[name=merchant]").change(function(){
+        var code = $(this).val();
+        if( $(this).is(":checked") ) {
+            $("div.choices").find("tr."+code).show();
+        }
+        else {
+            $("div.choices").find("tr."+code).hide();
+        }
+    });
 });
 </script>
 {% endblock %}
