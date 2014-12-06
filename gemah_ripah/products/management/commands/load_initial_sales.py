@@ -27,7 +27,7 @@ class Command(BaseCommand):
             reader = csv.reader(f, delimiter=',')
 
             user = User.objects.get(username="riki")
-            sales, is_created = Sales.objects.get_or_create(
+            sales, is_created = Sales.objects.update_or_create(
                 date=datetime.date(2014, 11, 20),
                 remarks="Initial Sales",
                 modified_by=user

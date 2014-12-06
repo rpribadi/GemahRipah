@@ -29,7 +29,7 @@ class Command(BaseCommand):
 
             user = User.objects.get(username="riki")
             supplier = Merchant.objects.get(code="LK")
-            purchase, is_created = Purchase.objects.get_or_create(
+            purchase, is_created = Purchase.objects.update_or_create(
                 date=datetime.date(2014, 10, 13),
                 supplier=supplier,
                 remarks="Initial Purchase",

@@ -31,13 +31,13 @@ class Command(BaseCommand):
             for line in reader:
                 promotion_price = line[2] if len(line) >= 3 and line[2] else None
 
-                record, is_created = ProductComparison.objects.get_or_create(
+                record, is_created = ProductComparison.objects.update_or_create(
                     seller=seller,
                     product=line[0].strip(),
                     defaults={
                         'price': line[1],
                         'promotion_price': promotion_price,
-                        'last_update': today
+                        'last_modified': today
                     }
                 )
                 record.save()

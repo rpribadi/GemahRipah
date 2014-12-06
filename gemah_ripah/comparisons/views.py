@@ -7,6 +7,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 
+from forms import ComparisonForm
+from comparisons import parsers
 from products.models import Product, ProductComparison
 
 SIMILARITY_THRESHOLD = 0.7
@@ -84,3 +86,33 @@ def edit(request):
             'message': message,
             'action': action
         })
+
+
+@login_required
+def update_comparison(request):
+
+    if request.method == "POST":
+        form = ComparisonForm(request.POST)
+        if form.is_valid():
+            parser = getattr(parsers, "parse_%s" % form.cleaned_data['seller'].code)
+            if parser:
+                parser(form.cleaned_data['seller'], form.cleaned_data['json'])
+                messages.success(request, 'Record has been saved successfully.')
+            else:
+                messages.error(request, 'Can not find proper parser for the seller.', extra_tags='danger')
+            return HttpResponseRedirect(".")
+        else:
+            messages.error(request, 'Failed to save record. Please correct the errors below.', extra_tags='danger')
+    else:
+        form = ComparisonForm()
+
+    context = {
+        'page_header': "Update Comparison",
+        'form': form
+    }
+
+    return render(
+        request,
+        'comparisons/update_comparison.html',
+        context
+    )

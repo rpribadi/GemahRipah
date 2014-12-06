@@ -27,7 +27,7 @@ class Command(BaseCommand):
         product_list = Product.objects.all()
 
         for index, comparison in enumerate(comparison_list):
-            record, is_created = ProductComparison.objects.get_or_create(
+            record, is_created = ProductComparison.objects.update_or_create(
                 seller=seller,
                 name=comparison['name'],
                 defaults={

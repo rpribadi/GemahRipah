@@ -6,6 +6,7 @@ urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     # url(r'^add/$', views.add, name='add'),
     url(r'^edit/$', views.edit, name='edit'),
+    url(r'^update-comparison/$', views.update_comparison, name='update_comparison'),
     # url(r'^delete/(?P<id>\d+)/$', views.delete, name='delete'),
     # url(r'^(?P<id>\d+)/$', views.detail, name='detail'),
 )

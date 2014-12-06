@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
             for line in reader:
 
-                record, is_created = Product.objects.get_or_create(
+                record, is_created = Product.objects.update_or_create(
                     brand=line[0].strip(),
                     name=line[1].strip(),
                     defaults={

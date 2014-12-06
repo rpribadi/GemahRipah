@@ -1,0 +1,57 @@
+{% extends "comparisons/base.html" %}
+
+{% load humanize %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<form method="post" action="." role="form" class="form-horizontal">
+    {% csrf_token %}
+    {{ form.id }}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">{{ message.level }}:</span>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    <div class="row">
+        <div class="col-md-8">
+
+            <div class="form-group {% if form.seller.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.seller.auto_id }}">{{ form.seller.label }}</label>
+                <div class="col-sm-4">
+                    {{ form.seller.errors }}
+                    {{ form.seller|add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="form-group {% if form.json.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.json.auto_id }}">{{ form.json.label }}</label>
+                <div class="col-sm-9">
+                    {{ form.json.errors }}
+                    {{ form.json|add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-10">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+});
+</script>
+{% endblock %}
