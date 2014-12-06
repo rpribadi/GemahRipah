@@ -42,11 +42,11 @@ class Product(models.Model):
 
 
 class ProductComparison(models.Model):
-    product = models.ForeignKey(Product, null=True)
+    product = models.ForeignKey(Product, blank=True, null=True)
     seller = models.ForeignKey(Merchant)
     name = CharUpperCaseField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=1, validators=[MinValueValidator(0)])
-    promotion_price = models.DecimalField(max_digits=10, decimal_places=1, null=True, validators=[MinValueValidator(0)])
+    promotion_price = models.DecimalField(max_digits=10, decimal_places=1, blank=True, null=True, validators=[MinValueValidator(0)])
     last_modified = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, blank=True, null=True, editable=False)
 
