@@ -19,7 +19,10 @@ SIMILARITY_THRESHOLD = 0.7
 def index(request):
     product_list = Product.objects.filter(is_active=True)
     comparison_list = ProductComparison.objects.all().select_related('product', 'seller')
-    merchant_list = Merchant.objects.filter(is_active=True)
+    merchant_list = Merchant.objects.filter(
+        is_active=True,
+        id__in=[item['seller'] for item in ProductComparison.objects.values('seller').distinct()]
+    )
 
     for product in product_list:
         product.comparison_list = []
