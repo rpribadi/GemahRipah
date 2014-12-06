@@ -21,15 +21,15 @@ def parse_RS(seller, raw_json):
     product_list = Product.objects.all()
 
     data = json.loads(raw_json)["result_html"]
-    soup = BeautifulSoup(data)
-    rows = soup.find("body").find_all("div", recursive=False)
+    soup = BeautifulSoup(data, 'html.parser')
+    rows = soup.find_all("div", recursive=False)
 
     print "  --> Found %d" % len(rows)
 
     for index, row in enumerate(rows):
         name = row.find(class_="name").get_text().strip()
         name = name.upper().replace("GR.","GR").strip()
-        name =  re.sub(" \*.*\*", "", name.upper())
+        name = re.sub(" \*.*\*", "", name.upper())
 
         if row.find(class_="price-old"):
             price = row.find(class_="price-old").get_text().strip()
