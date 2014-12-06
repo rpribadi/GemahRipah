@@ -2,9 +2,6 @@
 
 {% load humanize %}
 
-{% block sub_menu %}
-    <a href="{% url 'comparisons:update_comparison' %}" class="btn btn-primary">Update Data</a>
-{% endblock %}
 
 {% block content %}
     {% if messages %}
@@ -18,66 +15,28 @@
     {% endif %}
 
     {% if product_list %}
-        <p>
-        <form class="form-inline">
-            Show <strong>Available Choices</strong> from:
-            {% for merchant in merchant_list %}
-            <div class="checkbox">
-                <input type="checkbox" name="merchant" value="{{ merchant.code }}" checked> {{ merchant.code }}
-            </div>
-            {% endfor %}
-        </form>
-        </p>
         <table class="table table-condensed table-striped table-bordered table-hover">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th class="col-md-9">Name</th>
-                    <th>Price</th>
+                    <th class="">Name</th>
+                    <th>Buy Price</th>
+                    <th>Sell Price</th>
+                    {% for merchant in merchant_list %}
+                    <th>{{ merchant.code }}</th>
+                    {% endfor %}
                 </tr>
             </thead>
             <tbody>
                 {% for item in product_list %}
                 <tr>
                     <td>{{ forloop.counter }}.</td>
-                    <td>
-                        <a href="{% url 'products:detail' item.id %}">{{ item.name }}</a>
-
-                        <div class="row">
-                            <div class="col-md-10 selected">
-                                <table class="table table-condensed table-striped table-bordered">
-                                    {% for comparison in item.selected_list %}
-                                    <tr>
-                                        <td class="text-right">{{ comparison.ratio|floatformat:2|intcomma }}</td>
-                                        <td>{{ comparison.seller.code }}</td>
-                                        <td>{{ comparison.name }}</td>
-                                        <td class="text-right">{{ comparison.price|floatformat:0|intcomma }}</td>
-                                        <td class="text-center"><a class="remove" href="{% url 'comparisons:edit' %}?product={{ item.id }}&comparison={{ comparison.id }}">Remove</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                </table>
-                            </div>
-                            <div class="col-md-offset-1 col-md-10 choices">
-                                <fieldset>
-                                    {% if item.comparison_list or item.selected_list %}
-                                    <legend><small>Available Choices:</small></legend>
-                                    <table class="table table-condensed table-striped table-bordered">
-                                        {% for comparison in item.comparison_list %}
-                                        <tr class="{{ comparison.seller.code }}">
-                                            <td class="text-right">{{ comparison.ratio|floatformat:2|intcomma }}</td>
-                                            <td>{{ comparison.seller.code }}</td>
-                                            <td>{{ comparison.name }}</td>
-                                            <td class="text-right">{{ comparison.price|floatformat:0|intcomma }}</td>
-                                            <td class="text-center"><a class="select" href="{% url 'comparisons:edit' %}?product={{ item.id }}&comparison={{ comparison.id }}">Select</a></td>
-                                        </tr>
-                                        {% endfor %}
-                                    </table>
-                                    {% endif %}
-                                </fieldset>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
+                    <td><a href="{% url 'products:detail' item.id %}">{{ item.name }}</a></td>
+                    <td class="text-right">{{ item.buy_price|floatformat:0|intcomma }}</td>
+                    <td class="text-right {% if item.is_cheapest %}success{% endif %}">{{ item.price|floatformat:0|intcomma }}</td>
+                    {% for comparison in item.comparison_list %}
+                    <td class="text-right {% if comparison.is_cheapest %}danger{% endif %}">{% if comparison.is_on_promotion %}<em><small class="text-muted">promo</small></em> {% endif %}{{ comparison.price|floatformat:0|intcomma }}</td>
+                    {% endfor %}
                 </tr>
                 {% endfor %}
             </tbody>

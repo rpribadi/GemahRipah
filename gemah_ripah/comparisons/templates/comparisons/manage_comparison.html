@@ -1,0 +1,142 @@
+{% extends "comparisons/base.html" %}
+
+{% load humanize %}
+
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">{{  message.level }}:</span>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if product_list %}
+        <p>
+        <form class="form-inline">
+            Show <strong>Available Choices</strong> from:
+            {% for merchant in merchant_list %}
+            <div class="checkbox">
+                <input type="checkbox" name="merchant" value="{{ merchant.code }}" checked> {{ merchant.code }}
+            </div>
+            {% endfor %}
+        </form>
+        </p>
+        <table class="table table-condensed table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th class="col-md-9">Name</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in product_list %}
+                <tr>
+                    <td>{{ forloop.counter }}.</td>
+                    <td>
+                        <a href="{% url 'products:detail' item.id %}">{{ item.name }}</a>
+
+                        <div class="row">
+                            <div class="col-md-10 selected">
+                                <table class="table table-condensed table-striped table-bordered">
+                                    {% for comparison in item.selected_list %}
+                                    <tr>
+                                        <td class="text-right">{{ comparison.ratio|floatformat:2|intcomma }}</td>
+                                        <td>{{ comparison.seller.code }}</td>
+                                        <td>{{ comparison.name }}</td>
+                                        <td class="text-right">{{ comparison.price|floatformat:0|intcomma }}</td>
+                                        <td class="text-center"><a class="remove" href="{% url 'comparisons:edit' %}?product={{ item.id }}&comparison={{ comparison.id }}">Remove</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                            <div class="col-md-offset-1 col-md-10 choices">
+                                <fieldset>
+                                    {% if item.comparison_list or item.selected_list %}
+                                    <legend><small>Available Choices:</small></legend>
+                                    <table class="table table-condensed table-striped table-bordered">
+                                        {% for comparison in item.comparison_list %}
+                                        <tr class="{{ comparison.seller.code }}">
+                                            <td class="text-right">{{ comparison.ratio|floatformat:2|intcomma }}</td>
+                                            <td>{{ comparison.seller.code }}</td>
+                                            <td>{{ comparison.name }}</td>
+                                            <td class="text-right">{{ comparison.price|floatformat:0|intcomma }}</td>
+                                            <td class="text-center"><a class="select" href="{% url 'comparisons:edit' %}?product={{ item.id }}&comparison={{ comparison.id }}">Select</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                    {% endif %}
+                                </fieldset>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No product comparisons are available.</p>
+    {% endif %}
+
+<style>
+    div.checkbox {
+        margin-left: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+
+    $('div.choices').on('click', 'tr a.select', function(e){
+        e.preventDefault();
+        $a = $(this);
+        $.ajax({
+            url: $a.prop('href') + '&action=select',
+            dataType: "json",
+            success: function(response){
+                if( response.status === "success" ) {
+                    $tr = $a.closest('tr');
+                    $a.removeClass("select").addClass("remove").html("Remove");
+                    $record = $tr.closest('td');
+                    $record.find('div.selected table').append($tr);
+                }
+            },
+        });
+    });
+
+    $('div.selected').on('click', 'tr a.remove', function(e){
+        e.preventDefault();
+        $a = $(this);
+        $.ajax({
+            url: $a.prop('href') + '&action=remove',
+            dataType: "json",
+            success: function(response){
+                if( response.status === "success" ) {
+                    $tr = $a.closest('tr');
+                    $a.removeClass("remove").addClass("select").html("Select");
+                    $record = $tr.closest('td');
+                    $record.find('div.choices table').append($tr);
+                }
+            },
+        });
+    });
+
+    $("input[name=merchant]").change(function(){
+        var code = $(this).val();
+        if( $(this).is(":checked") ) {
+            $("div.choices").find("tr."+code).show();
+        }
+        else {
+            $("div.choices").find("tr."+code).hide();
+        }
+    });
+});
+</script>
+{% endblock %}

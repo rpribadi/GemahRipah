@@ -1,3 +1,4 @@
+import copy
 import difflib
 
 from django.db import models
@@ -11,12 +12,72 @@ from forms import ComparisonForm
 from comparisons import parsers
 from merchants.models import Merchant
 from products.models import Product, ProductComparison
+from purchase.models import PurchaseItem
 
 SIMILARITY_THRESHOLD = 0.7
 
 
 @login_required
 def index(request):
+    merchant_list = Merchant.objects.filter(
+        is_active=True,
+        id__in=[item['seller'] for item in ProductComparison.objects.values('seller').distinct()]
+    ).order_by('code')
+
+    merchant_map = {}
+    comparison_list_template = []
+    for i, merchant in enumerate(merchant_list):
+        merchant_map[merchant.code] = i
+        comparison_list_template.append({
+            'price': None,
+            'is_on_promotion': False
+        })
+
+    product_list = Product.objects.all().order_by('name').prefetch_related(
+        models.Prefetch('purchaseitem_set', queryset=PurchaseItem.objects.select_related('purchase').order_by('-purchase__date', '-id'))
+    ).prefetch_related(
+        models.Prefetch('productcomparison_set', queryset=ProductComparison.objects.select_related('seller'))
+    )
+
+    for product in product_list:
+        if product.purchaseitem_set.all().count():
+            product.buy_price = product.purchaseitem_set.all()[0].price
+            product.margin = product.price - product.buy_price
+
+        product.comparison_list = copy.deepcopy(comparison_list_template)
+
+        if product.productcomparison_set.all().count():
+            _index = -1
+            _price = product.price
+            for item in product.productcomparison_set.all():
+                i = merchant_map[item.seller.code]
+                product.comparison_list[i]['promo'] = item.is_on_promotion()
+                product.comparison_list[i]['price'] = item.current_price
+                if item.current_price < _price:
+                    _index = i
+                    _price = item.current_price
+
+            if _index < 0:
+                product.is_cheapest = True
+            else:
+                product.comparison_list[_index]['is_cheapest'] = True
+
+    context = {
+        'page_title': 'Manage Comparison',
+        'page_header': "Manage Comparison",
+        'product_list': product_list,
+        'merchant_list': merchant_list
+    }
+
+    return render(
+        request,
+        'comparisons/index.html',
+        context
+    )
+
+
+@login_required
+def manage_comparison(request):
     product_list = Product.objects.filter(is_active=True)
     comparison_list = ProductComparison.objects.all().select_related('product', 'seller')
     merchant_list = Merchant.objects.filter(
@@ -51,15 +112,15 @@ def index(request):
         print product, " : ", len(product.comparison_list)
 
     context = {
-        'page_title': ': Product List',
-        'page_header': "Product List",
+        'page_title': 'Manage Comparison',
+        'page_header': "Manage Comparison",
         'product_list': product_list,
         'merchant_list': merchant_list
     }
 
     return render(
         request,
-        'comparisons/index.html',
+        'comparisons/manage_comparison.html',
         context
     )
 
@@ -95,7 +156,7 @@ def edit(request):
 
 
 @login_required
-def update_comparison(request):
+def import_comparison(request):
 
     if request.method == "POST":
         form = ComparisonForm(request.POST)
@@ -113,12 +174,12 @@ def update_comparison(request):
         form = ComparisonForm()
 
     context = {
-        'page_header': "Update Comparison",
+        'page_header': "Import Comparison",
         'form': form
     }
 
     return render(
         request,
-        'comparisons/update_comparison.html',
+        'comparisons/import_comparison.html',
         context
     )
