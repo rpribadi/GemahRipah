@@ -22,7 +22,7 @@ class Command(BaseCommand):
     def process(self):
         now = datetime.datetime.now()
         subject = "Product Price Per %s" % now
-        sender = "shop@gemahripah.net"
+        sender = "GemahRipah.net <shop@gemahripah.net>"
         recipients = ["pribadi.riki@gmail.com", "ulnita.prihastie@gmail.com"]
         message = "Please find the attachment for the latest product price.\n\nRegards,\nGemah Ripah"
         attachment = "product-%s.csv" % now.strftime("%d-%b-%Y")
@@ -48,7 +48,7 @@ class Command(BaseCommand):
             sender,
             recipients,
             [],
-            headers={'Reply-To': 'pribadi.riki@gmail.com'}
+            headers={'Reply-To': 'shop@gemahripah.net'}
         )
 
         with open(attachment) as f:
