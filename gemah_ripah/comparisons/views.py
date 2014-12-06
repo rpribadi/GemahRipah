@@ -63,8 +63,8 @@ def index(request):
                 product.comparison_list[_index]['is_cheapest'] = True
 
     context = {
-        'page_title': 'Manage Comparison',
-        'page_header': "Manage Comparison",
+        'page_title': 'Price Comparison',
+        'page_header': "Price Comparison",
         'product_list': product_list,
         'merchant_list': merchant_list
     }
@@ -75,7 +75,7 @@ def index(request):
         context
     )
 
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 @login_required
 def manage_comparison(request):
     product_list = Product.objects.filter(is_active=True)
@@ -84,6 +84,17 @@ def manage_comparison(request):
         is_active=True,
         id__in=[item['seller'] for item in ProductComparison.objects.values('seller').distinct()]
     )
+
+    paginator_inner = Paginator(product_list, 20)
+    page = request.GET.get('page')
+    try:
+        product_list = paginator_inner.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        product_list = paginator_inner.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        product_list = paginator_inner.page(paginator_inner.num_pages)
 
     for product in product_list:
         product.comparison_list = []
@@ -115,6 +126,7 @@ def manage_comparison(request):
         'page_title': 'Manage Comparison',
         'page_header': "Manage Comparison",
         'product_list': product_list,
+        'product_list_pagination': Product.objects.all(),
         'merchant_list': merchant_list
     }
 

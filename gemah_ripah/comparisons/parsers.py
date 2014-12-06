@@ -56,4 +56,33 @@ def parse_RS(seller, raw_json):
         print "%d. [%s] %s" % (index+1, is_created, obj.name)
 
 
-    pass
+def parse_HP(seller, raw_json):
+    product_list = Product.objects.all()
+
+    rows = json.loads(raw_json)['items']
+
+    print "  --> Found %d" % len(rows)
+
+    for index, row in enumerate(rows):
+        price = float(row['product_price'].replace(".", "").strip())
+
+        promotion_price = row.get('promotion_price', None)
+        if promotion_price:
+            promotion_price = float(promotion_price.replace(".", "").strip())
+
+        name = re.sub("\s*\(.*\)\**", "", row['product_name'].upper()).strip()
+
+
+        obj, is_created = ProductComparison.objects.update_or_create(
+            seller=seller,
+            name=name,
+            defaults={
+                'price': price,
+                'promotion_price': promotion_price
+            }
+        )
+
+        obj = check_ratio(obj, product_list)
+        obj.save()
+        print "%d. [%s] %s" % (index+1, is_created, obj.name)
+

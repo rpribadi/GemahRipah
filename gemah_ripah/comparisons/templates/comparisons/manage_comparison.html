@@ -1,6 +1,7 @@
 {% extends "comparisons/base.html" %}
 
 {% load humanize %}
+{% load pagination_tags %}
 
 
 {% block content %}
@@ -15,15 +16,17 @@
     {% endif %}
 
     {% if product_list %}
+    {% autopaginate product_list_pagination 20 %}
+        {% paginate %}
         <p>
-        <form class="form-inline">
-            Show <strong>Available Choices</strong> from:
-            {% for merchant in merchant_list %}
-            <div class="checkbox">
-                <input type="checkbox" name="merchant" value="{{ merchant.code }}" checked> {{ merchant.code }}
-            </div>
-            {% endfor %}
-        </form>
+            <form class="form-inline">
+                Show <strong>Available Choices</strong> from:
+                {% for merchant in merchant_list %}
+                <div class="checkbox">
+                    <input type="checkbox" name="merchant" value="{{ merchant.code }}" checked> {{ merchant.code }}
+                </div>
+                {% endfor %}
+            </form>
         </p>
         <table class="table table-condensed table-striped table-bordered table-hover">
             <thead>
@@ -36,7 +39,7 @@
             <tbody>
                 {% for item in product_list %}
                 <tr>
-                    <td>{{ forloop.counter }}.</td>
+                    <td>{{ forloop.counter0|add:product_list.start_index }}.</td>
                     <td>
                         <a href="{% url 'products:detail' item.id %}">{{ item.name }}</a>
 
@@ -79,6 +82,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% paginate %}
     {% else %}
         <p>No product comparisons are available.</p>
     {% endif %}

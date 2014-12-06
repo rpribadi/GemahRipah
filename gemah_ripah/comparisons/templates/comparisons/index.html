@@ -2,7 +2,6 @@
 
 {% load humanize %}
 
-
 {% block content %}
     {% if messages %}
         {% for message in messages %}
@@ -15,6 +14,9 @@
     {% endif %}
 
     {% if product_list %}
+        <p>
+            <span class="glyphicon glyphicon-star promo"></span> Promo
+        </p>
         <table class="table table-condensed table-striped table-bordered table-hover">
             <thead>
                 <tr>
@@ -35,7 +37,10 @@
                     <td class="text-right">{{ item.buy_price|floatformat:0|intcomma }}</td>
                     <td class="text-right {% if item.is_cheapest %}success{% endif %}">{{ item.price|floatformat:0|intcomma }}</td>
                     {% for comparison in item.comparison_list %}
-                    <td class="text-right {% if comparison.is_cheapest %}danger{% endif %}">{% if comparison.is_on_promotion %}<em><small class="text-muted">promo</small></em> {% endif %}{{ comparison.price|floatformat:0|intcomma }}</td>
+                    <td class="text-right {% if comparison.is_cheapest %}danger{% endif %}">
+                        {% if comparison.is_on_promotion %}<span class="glyphicon glyphicon-star promo"></span>{% endif %}
+                        {{ comparison.price|floatformat:0|intcomma }}
+                    </td>
                     {% endfor %}
                 </tr>
                 {% endfor %}

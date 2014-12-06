@@ -40,6 +40,7 @@ INSTALLED_APPS = (
 
     'debug_toolbar',
     'widget_tweaks',
+    'pagination',
 
     'shop',
     'dashboard',
@@ -62,24 +63,13 @@ MIDDLEWARE_CLASSES = (
 
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'pagination.middleware.PaginationMiddleware',
 )
 
 ROOT_URLCONF = 'gemah_ripah.urls'
 
 WSGI_APPLICATION = 'gemah_ripah.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'gemah_ripah',
-        'USER': 'gemah_ripah_user',
-        'PASSWORD': '123456'
-    }
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -107,6 +97,20 @@ STATICFILES_DIRS = (
 )
 
 LOGIN_REDIRECT_URL = "/admin/dashboard/"
+
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.request"
+)
+
+PAGINATION_DEFAULT_WINDOW = 4
 
 try:
     from local_settings import *
