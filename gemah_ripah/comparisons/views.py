@@ -51,7 +51,7 @@ def index(request):
             _price = product.price
             for item in product.productcomparison_set.all():
                 i = merchant_map[item.seller.code]
-                product.comparison_list[i]['promo'] = item.is_on_promotion()
+                product.comparison_list[i]['is_on_promotion'] = item.is_on_promotion()
                 product.comparison_list[i]['price'] = item.current_price
                 if item.current_price < _price:
                     _index = i
