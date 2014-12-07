@@ -22,10 +22,11 @@
                 <tr>
                     <th>#</th>
                     <th class="">Name</th>
-                    <th>Buy Price</th>
-                    <th>Sell Price</th>
+                    <th class="col-md-1">Buy Price</th>
+                    <th class="col-md-1">Margin</th>
+                    <th class="col-md-1">Sell Price</th>
                     {% for merchant in merchant_list %}
-                    <th>{{ merchant.code }}</th>
+                    <th class="col-md-1">{{ merchant.code }}</th>
                     {% endfor %}
                 </tr>
             </thead>
@@ -35,6 +36,7 @@
                     <td>{{ forloop.counter }}.</td>
                     <td><a href="{% url 'products:detail' item.id %}">{{ item.name }}</a></td>
                     <td class="text-right">{{ item.buy_price|floatformat:0|intcomma }}</td>
+                    <td class="text-right">{{ item.margin|floatformat:0|intcomma }}</td>
                     <td class="text-right {% if item.is_cheapest %}success{% endif %}">{{ item.price|floatformat:0|intcomma }}</td>
                     {% for comparison in item.comparison_list %}
                     <td class="text-right {% if comparison.is_cheapest %}danger{% endif %}">
