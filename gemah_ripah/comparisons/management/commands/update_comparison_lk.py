@@ -9,6 +9,8 @@ from django.core.management.base import BaseCommand, CommandError
 
 from products.models import Merchant, Product, ProductComparison
 
+SAME_ITEM_THRESHOLD = 0.975
+
 
 class Command(BaseCommand):
     help = 'Updates comparison prices'
@@ -37,7 +39,7 @@ class Command(BaseCommand):
 
             for product in product_list:
                 ratio = difflib.SequenceMatcher(None, product.name, record.name).ratio()
-                if ratio >= 0.98:
+                if ratio >= SAME_ITEM_THRESHOLD:
                     record.product = product
                     break
 
@@ -62,7 +64,7 @@ class Command(BaseCommand):
                 cols = row.find_all("td")
                 if index >= 2 and cols[0].get_text().strip():
                     name = "%s %s" % (cols[2].get_text().strip(), cols[3].get_text().strip())
-                    name = name.replace("\n", "").strip()
+                    name = name.replace("\n", "").strip().upper()
                     price = int(cols[5].get_text().replace(".", "").strip())
 
                     item = {
