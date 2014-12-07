@@ -129,6 +129,7 @@ def manage_comparison(request):
                 name=comparison.name,
                 seller=comparison.seller,
                 price=comparison.price,
+                promotion_price=comparison.promotion_price
             )
             temp.ratio = ratio
             if ratio > min_similarity_ratio:

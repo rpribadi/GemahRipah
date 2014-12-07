@@ -57,7 +57,7 @@
                                         <td class="text-right">{{ comparison.ratio|floatformat:2|intcomma }}</td>
                                         <td>{{ comparison.seller.code }}</td>
                                         <td>{{ comparison.name }}</td>
-                                        <td class="text-right">{{ comparison.price|floatformat:0|intcomma }}</td>
+                                        <td class="text-right">{{ comparison.current_price|floatformat:0|intcomma }}</td>
                                         <td class="text-center"><a class="remove" href="{% url 'comparisons:edit' %}?product={{ item.id }}&comparison={{ comparison.id }}">Remove</a></td>
                                     </tr>
                                     {% endfor %}
@@ -81,7 +81,7 @@
                                             <td class="text-right">{{ comparison.ratio|floatformat:2|intcomma }}</td>
                                             <td>{{ comparison.seller.code }}</td>
                                             <td>{{ comparison.name }}</td>
-                                            <td class="text-right">{{ comparison.price|floatformat:0|intcomma }}</td>
+                                            <td class="text-right">{{ comparison.current_price|floatformat:0|intcomma }}</td>
                                             <td class="text-center"><a class="select" href="{% url 'comparisons:edit' %}?product={{ item.id }}&comparison={{ comparison.id }}">Select</a></td>
                                         </tr>
                                         {% endfor %}
