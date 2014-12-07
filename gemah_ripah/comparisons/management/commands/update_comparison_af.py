@@ -10,7 +10,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from products.models import Merchant, Product, ProductComparison
 
-SAME_ITEM_THRESHOLD = 0.97
+SAME_ITEM_THRESHOLD = 0.965
 
 class Command(BaseCommand):
     help = 'Updates comparison prices'
