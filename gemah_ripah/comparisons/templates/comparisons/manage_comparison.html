@@ -16,16 +16,22 @@
     {% endif %}
 
     {% if product_list %}
-    {% autopaginate product_list_pagination 20 %}
+    {% autopaginate product_list_pagination max_per_page %}
         {% paginate %}
         <p>
-            <form class="form-inline">
-                Show <strong>Available Choices</strong> from:
+            <form class="form-inline" method="get" action=".">
+                <input type="hidden" name="page" value="{{ page }}">
+                Min <strong>Similarity Ratio</strong>:
+                <div class="form-group">
+                    <input type="text" class="form-control" name="min_similarity_ratio" value="{{ min_similarity_ratio }}" style="width: 75px;">
+                </div>
+                &nbsp; Show <strong>Available Choices</strong> from:
                 {% for merchant in merchant_list %}
                 <div class="checkbox">
-                    <input type="checkbox" name="merchant" value="{{ merchant.code }}" checked> {{ merchant.code }}
+                    <input type="checkbox" name="merchant" value="{{ merchant.code }}" {% if merchant.is_selected %}checked{% endif %}> {{ merchant.code }}
                 </div>
                 {% endfor %}
+                &nbsp; <button type="submit" class="btn btn-sm btn-primary">Update Filter</button>
             </form>
         </p>
         <table class="table table-condensed table-striped table-bordered table-hover">
@@ -60,7 +66,15 @@
                             <div class="col-md-offset-1 col-md-10 choices">
                                 <fieldset>
                                     {% if item.comparison_list or item.selected_list %}
-                                    <legend><small>Available Choices:</small></legend>
+                                    <form class="form-inline">
+                                        Available Choices:
+                                        {% for code in comparison_merchant_ids %}
+                                        <div class="checkbox">
+                                            <input type="checkbox" class="merchant-filter" value="{{ code}}" checked> {{ code }}
+                                        </div>
+                                        {% endfor %}
+                                    </form>
+
                                     <table class="table table-condensed table-striped table-bordered">
                                         {% for comparison in item.comparison_list %}
                                         <tr class="{{ comparison.seller.code }}">
@@ -132,13 +146,13 @@ $(document).ready(function(){
         });
     });
 
-    $("input[name=merchant]").change(function(){
+    $("input.merchant-filter").change(function(){
         var code = $(this).val();
         if( $(this).is(":checked") ) {
-            $("div.choices").find("tr."+code).show();
+            $(this).closest("div.choices").find("tr."+code).show();
         }
         else {
-            $("div.choices").find("tr."+code).hide();
+            $(this).closest("div.choices").find("tr."+code).hide();
         }
     });
 });

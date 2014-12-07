@@ -78,14 +78,34 @@ def index(request):
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 @login_required
 def manage_comparison(request):
-    product_list = Product.objects.filter(is_active=True)
+    max_per_page = 25
+
+    product_list = Product.objects.filter(is_active=True).order_by('name').prefetch_related('productcomparison_set__seller')
     comparison_list = ProductComparison.objects.all().select_related('product', 'seller')
+    comparison_merchant_ids = []
+
+    if not request.GET.get('merchant', None) is None:
+        comparison_merchant_ids = request.GET.getlist('merchant')
+    else:
+        comparison_merchant_ids.append(ProductComparison.objects.select_related('seller').latest('id').seller.code)
+
+    try:
+        min_similarity_ratio = round(float(request.GET['min_similarity_ratio']), 2)
+    except Exception, e:
+        min_similarity_ratio = SIMILARITY_THRESHOLD
+
+    comparison_list = comparison_list.filter(seller__code__in=comparison_merchant_ids)
+
     merchant_list = Merchant.objects.filter(
         is_active=True,
         id__in=[item['seller'] for item in ProductComparison.objects.values('seller').distinct()]
-    )
+    ).order_by('code')
 
-    paginator_inner = Paginator(product_list, 20)
+    for merchant in merchant_list:
+        if merchant.code in comparison_merchant_ids:
+            merchant.is_selected = True
+
+    paginator_inner = Paginator(product_list, max_per_page)
     page = request.GET.get('page')
     try:
         product_list = paginator_inner.page(page)
@@ -99,6 +119,9 @@ def manage_comparison(request):
     for product in product_list:
         product.comparison_list = []
         product.selected_list = []
+        for item in product.productcomparison_set.all():
+            item.ratio = difflib.SequenceMatcher(None, product.name, item.name).ratio()
+            product.selected_list.append(item)
         for comparison in comparison_list:
             ratio = difflib.SequenceMatcher(None, product.name, comparison.name).ratio()
             temp = ProductComparison(
@@ -108,9 +131,7 @@ def manage_comparison(request):
                 price=comparison.price,
             )
             temp.ratio = ratio
-            if comparison.product == product:
-                product.selected_list.append(temp)
-            if ratio > SIMILARITY_THRESHOLD:
+            if ratio > min_similarity_ratio:
                 temp.is_selected = False
                 for item in product.selected_list:
                     if item.id == comparison.id:
@@ -127,7 +148,11 @@ def manage_comparison(request):
         'page_header': "Manage Comparison",
         'product_list': product_list,
         'product_list_pagination': Product.objects.all(),
-        'merchant_list': merchant_list
+        'merchant_list': merchant_list,
+        'max_per_page': max_per_page,
+        'page': page,
+        'min_similarity_ratio': min_similarity_ratio,
+        'comparison_merchant_ids': comparison_merchant_ids
     }
 
     return render(

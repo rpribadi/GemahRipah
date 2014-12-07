@@ -12,7 +12,7 @@ from models import Product
 
 @login_required
 def index(request):
-    product_list = Product.objects.all().prefetch_related(
+    product_list = Product.objects.all().order_by('name').prefetch_related(
         models.Prefetch('purchaseitem_set', queryset=PurchaseItem.objects.select_related('purchase').order_by('-purchase__date', '-id'))
     )
 

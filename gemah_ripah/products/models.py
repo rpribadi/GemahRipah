@@ -25,11 +25,11 @@ class Product(models.Model):
     objects = ProductManager()
 
     class Meta:
-        ordering = ("brand", "name")
+        ordering = ("name",)
         unique_together = ("brand", "name")
 
     def __str__(self):
-        return self.brand + " - " + self.name
+        return self.name
 
     @property
     def stock(self):

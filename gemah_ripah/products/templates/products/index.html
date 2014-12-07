@@ -26,8 +26,8 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>Brand</th>
                 <th>Product</th>
+                <th>Brand</th>
                 <th>Buy Price</th>
                 <th>Sell Price</th>
                 <th>Margin</th>
@@ -39,7 +39,6 @@
             {% for product in product_list %}
             <tr class="{% if product.is_out_of_stock %}out-of-stock{% endif %}">
                 <td>{{ forloop.counter }}.</td>
-                <td>{{ product.brand }}</td>
                 <td>
                     {% if product.remarks %}
                     <button type="button" class="pops btn btn-danger btn-xs" aria-label="Left Align" data-toggle="popover" title="Remarks" data-trigger="focus" data-content="{{ product.remarks }}">
@@ -49,6 +48,7 @@
 
                     <a href="{% url 'products:detail' product.id %}">{{ product.name }}</a>
                 </td>
+                <td>{{ product.brand }}</td>
                 <td class="text-right">{{ product.buy_price|floatformat:0|intcomma }}</td>
                 <td class="text-right">{{ product.price|floatformat:0|intcomma }}</td>
                 <td class="text-right">{{ product.margin|floatformat:0|intcomma }}</td>
