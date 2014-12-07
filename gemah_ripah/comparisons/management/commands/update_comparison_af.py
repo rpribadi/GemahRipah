@@ -48,9 +48,10 @@ class Command(BaseCommand):
                 if ratio >= SAME_ITEM_THRESHOLD:
                     record.product = product
                     break
+                ratio = 0
 
             record.save()
-            print "%d. [%s] %s" % (index+1, is_created, record)
+            print "%d. [%s] %s: %s" % (index+1, is_created, record, ratio)
 
             pass
 
