@@ -49,6 +49,21 @@ class Purchase(models.Model):
     def net_expenses(self):
         return self.gross_expenses - self.discount
 
+    @property
+    def estimated_revenues(self):
+        if hasattr(self, '_estimated_revenues'):
+            return self._estimated_revenues
+
+        self._estimated_revenues = 0
+        for item in self.purchaseitem_set.all().select_related('product'):
+            self._estimated_revenues += (item.product.price * item.quantity)
+
+        return self._estimated_revenues
+
+    @property
+    def estimated_profit(self):
+        return self.estimated_revenues - self.net_expenses
+
 class PurchaseItem(models.Model):
     purchase = models.ForeignKey(Purchase)
     product = models.ForeignKey(Product)

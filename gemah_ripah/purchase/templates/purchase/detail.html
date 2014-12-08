@@ -37,6 +37,14 @@
                         <td><strong>Net Expenses</strong></td>
                         <td><mark><strong>{{ purchase.net_expenses|floatformat:0|intcomma }}</strong></mark></td>
                     </tr>
+                    <tr>
+                        <td><strong>Est. Revenues</strong></td>
+                        <td><mark><strong>{{ purchase.estimated_revenues|floatformat:0|intcomma }}</strong></mark></td>
+                    </tr>
+                    <tr class="{% if purchase.estimated_profit < 0 %}danger{% else %}success{% endif %}">
+                        <td><strong>Est. Profit</strong></td>
+                        <td><mark><strong>{{ purchase.estimated_profit|floatformat:0|intcomma }}</strong></mark></td>
+                    </tr>
                     {% if purchase.remarks %}
                     <tr>
                         <td>Remarks</td>
@@ -60,8 +68,11 @@
                         <tr>
                             <th>#</th>
                             <th>Product</th>
-                            <th>Price</th>
+                            <th>Buy Price</th>
+                            <th>Est. Sell Price</th>
+                            <th>Est. Margin</th>
                             <th>Quantity</th>
+                            <th>Est. Profit</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -77,7 +88,10 @@
                                 <a href="{% url 'products:detail' item.product.id %}">{{ item.product }}</a>
                             </td>
                             <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
+                            <td class="text-right">{{ item.product.price|floatformat:0|intcomma }}</td>
+                            <td class="text-right">{{ item.estimated_margin|floatformat:0|intcomma }}</td>
                             <td class="text-right">{{ item.quantity|intcomma }}</td>
+                            <td class="text-right">{{ item.estimated_profit|floatformat:0|intcomma }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

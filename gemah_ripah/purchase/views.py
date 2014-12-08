@@ -124,6 +124,10 @@ def detail(request, id):
         models.Prefetch('purchaseitem_set', queryset=PurchaseItem.objects.select_related('product'))
     ), pk=id)
 
+    for item in purchase.purchaseitem_set.all():
+        item.estimated_margin = item.product.price - item.price
+        item.estimated_profit = item.estimated_margin * item.quantity
+
     context = {
         'page_header': "Purchase Detail ID: %s" % id,
         'purchase': purchase
