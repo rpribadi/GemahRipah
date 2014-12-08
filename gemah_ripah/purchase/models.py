@@ -87,6 +87,11 @@ def on_post_save_purchase_callback(sender, **kwargs):
         update_post_total_purchased(item.product)
 
 
+@receiver(models.signals.pre_save, sender=PurchaseItem)
+def on_pre_save_callback(sender, **kwargs):
+    update_pre_total_purchased(kwargs['instance'])
+
+
 @receiver(models.signals.post_save, sender=PurchaseItem)
 def on_post_save_callback(sender, **kwargs):
     update_post_total_purchased(kwargs['instance'].product)
@@ -95,6 +100,19 @@ def on_post_save_callback(sender, **kwargs):
 @receiver(models.signals.post_delete, sender=PurchaseItem)
 def on_delete_callback(sender, **kwargs):
     update_post_total_purchased(kwargs['instance'].product)
+
+
+def update_pre_total_purchased(instance):
+    if instance.id:
+        old_instance = PurchaseItem.objects.get(pk=instance.id)
+        if old_instance.product.id != instance.product.id:
+            total = 0
+            items = PurchaseItem.objects.filter(product=old_instance.product).exclude(pk=old_instance.id)
+            for item in items:
+                total += item.quantity
+            old_instance.product.total_purchased = total
+
+            old_instance.product.save()
 
 
 def update_post_total_purchased(product):
