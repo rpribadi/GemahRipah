@@ -30,6 +30,16 @@
                     {{ form.date|add_class:"form-control" }}
                 </div>
             </div>
+            <div class="form-group {% if form.is_active.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.is_active.auto_id }}">{{ form.is_active.label }}</label>
+                <div class="col-sm-4 checkbox">
+                    <label>
+                    {{ form.is_active.errors }}
+                    {{ form.is_active }}
+                    <em class="text-muted">Untick to set as purchase draft.</em>
+                    </label>
+                </div>
+            </div>
             <div class="form-group {% if form.supplier.errors %} has-error {% endif %}">
                 <label class="col-sm-3 control-label" for="{{ form.supplier.auto_id }}">{{ form.supplier.label }}</label>
                 <div class="col-sm-4">
@@ -79,7 +89,9 @@
                         <tr>
                             <th>#</th>
                             <th>Product</th>
+                            <th>Latest Price</th>
                             <th>Price</th>
+                            <th>In Stock</th>
                             <th class="col-sm-1">Quantity</th>
                             <th class="col-sm-1">Action</th>
                         </tr>
@@ -94,14 +106,16 @@
                                 {% endfor %}
                                 {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
                             </td>
-                            <td class="{% if form.product.errors %} has-error {% endif %}">
+                            <td class="product {% if form.product.errors %} has-error {% endif %}">
                                 {{ form.product.errors }}
                                 {{ form.product|add_class:"form-control" }}
                             </td>
+                            <td class="latest-price text-right"></td>
                             <td class="{% if form.price.errors %} has-error {% endif %}">
                                 {{ form.price.errors }}
                                 {{ form.price|add_class:"form-control" }}
                             </td>
+                            <td class="stock text-right"></td>
                             <td class="{% if form.quantity.errors %} has-error {% endif %}">
                                 {{ form.quantity.errors }}
                                 {{ form.quantity|add_class:"form-control" }}
@@ -179,6 +193,34 @@ $(document).ready(function(){
             renumberRow();
         }
     });
+
+    var loader = $("<span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span>");
+
+    $(".purchase-items tbody ").on("change", ".product select",function(){
+        var tr = $(this).closest("tr");
+        if( $(this).val() ) {
+            tr.find("td.latest-price").html(loader.clone());
+            tr.find("td.stock").html(loader.clone());
+            $.get("/admin/products/" + $(this).val()).done(function(product){
+                var latestPrice = "";
+                if( product.buy_price ){
+                    latestPrice = numberWithCommas(product.buy_price);
+                }
+                console.log(product.latest_price);
+                tr.find("td.latest-price").html(latestPrice);
+                tr.find("td.stock").html(numberWithCommas(product.stock));
+            }).fail(function(){
+                tr.find("td.latest-price").html("");
+                tr.find("td.stock").html("");
+            });
+        }
+        else {
+            tr.find("td.latest-price").html("");
+            tr.find("td.stock").html("");
+        }
+    });
+
+    $(".purchase-items tbody").find(".product select").trigger("change");
 });
 </script>
 {% endblock %}

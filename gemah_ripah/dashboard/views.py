@@ -13,8 +13,8 @@ from sales.models import Sales, SalesItem
 
 @login_required
 def index(request):
-    purchase = Purchase.objects.aggregate(Sum('discount'), Sum('other_expenses'))
-    purchase_items = PurchaseItem.objects.aggregate(
+    purchase = Purchase.objects.filter(is_active=True).aggregate(Sum('discount'), Sum('other_expenses'))
+    purchase_items = PurchaseItem.objects.filter(purchase__is_active=True).aggregate(
         total=Sum('price', field="price*quantity")
     )
 

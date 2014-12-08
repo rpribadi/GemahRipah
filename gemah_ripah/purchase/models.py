@@ -13,6 +13,7 @@ class Purchase(models.Model):
     other_expenses = models.DecimalField(max_digits=10, decimal_places=1, default=0)
     discount = models.DecimalField(max_digits=10, decimal_places=1, default=0)
     remarks = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
     last_modified = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, editable=False)
 
@@ -64,6 +65,7 @@ class Purchase(models.Model):
     def estimated_profit(self):
         return self.estimated_revenues - self.net_expenses
 
+
 class PurchaseItem(models.Model):
     purchase = models.ForeignKey(Purchase)
     product = models.ForeignKey(Product)
@@ -79,41 +81,29 @@ class PurchaseItem(models.Model):
         return "%s: %d @ %f" % (self.product, self.quantity, self.price)
 
 
-@receiver(models.signals.pre_save, sender=PurchaseItem)
-def on_pre_save_callback(sender, **kwargs):
-    update_pre_total_purchased(kwargs['instance'])
+@receiver(models.signals.post_save, sender=Purchase)
+def on_post_save_purchase_callback(sender, **kwargs):
+    for item in kwargs['instance'].purchaseitem_set.all():
+        update_post_total_purchased(item.product)
 
 
 @receiver(models.signals.post_save, sender=PurchaseItem)
 def on_post_save_callback(sender, **kwargs):
-    update_post_total_purchased(kwargs['instance'])
+    update_post_total_purchased(kwargs['instance'].product)
 
 
 @receiver(models.signals.post_delete, sender=PurchaseItem)
 def on_delete_callback(sender, **kwargs):
-    update_post_total_purchased(kwargs['instance'])
+    update_post_total_purchased(kwargs['instance'].product)
 
 
-def update_pre_total_purchased(instance):
-    if instance.id:
-        old_instance = PurchaseItem.objects.get(pk=instance.id)
-        if old_instance.product.id != instance.product.id:
-            total = 0
-            items = PurchaseItem.objects.filter(product=old_instance.product).exclude(pk=old_instance.id)
-            for item in items:
-                total += item.quantity
-            old_instance.product.total_purchased = total
-
-            old_instance.product.save()
-
-
-def update_post_total_purchased(instance):
+def update_post_total_purchased(product):
     total = 0
-    items = PurchaseItem.objects.filter(product=instance.product)
+    items = PurchaseItem.objects.filter(product=product, purchase__is_active=True)
     for item in items:
         total += item.quantity
-    instance.product.total_purchased = total
+    product.total_purchased = total
 
-    instance.product.save()
+    product.save()
 
 

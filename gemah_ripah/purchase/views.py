@@ -15,6 +15,7 @@ from models import Purchase, PurchaseItem
 def index(request):
     context = {
         'page_header': "Purchase",
+        'page_title': "Purchase",
         'purchase_list': Purchase.objects.select_related('supplier')
     }
 
@@ -58,6 +59,7 @@ def add(request):
 
     context = {
         'page_header': "Add New Purchase",
+        'page_title': "Add New Purchase",
         'form': form,
         'formset': formset
     }
@@ -79,8 +81,6 @@ def edit(request, id):
         form=PurchaseItemForm
     )
     if request.method == "POST":
-        import pprint
-        # pprint.pprint(request.POST)
         form = PurchaseForm(request.POST, instance=sales)
         formset = PurchaseItemFormSet(
             request.POST,
@@ -107,6 +107,7 @@ def edit(request, id):
 
     context = {
         'page_header': "Edit Purchase ID: %s" % id,
+        'page_title': "Edit Purchase ID: %s" % id,
         'form': form,
         'formset': formset
     }
@@ -130,6 +131,7 @@ def detail(request, id):
 
     context = {
         'page_header': "Purchase Detail ID: %s" % id,
+        'page_title': "Purchase Detail ID: %s" % id,
         'purchase': purchase
     }
 
