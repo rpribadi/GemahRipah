@@ -11,7 +11,7 @@
                 <tbody>
                     <tr>
                         <td class="col-md-5">Date</td>
-                        <td class="">{{ purchase.date }}</td>
+                        <td class="">{{ purchase.date }}{% if not purchase.is_active %} <em class="text-muted">(draft)</em>{% endif %}</td>
                     </tr>
                     <tr>
                         <td>Supplier</td>
