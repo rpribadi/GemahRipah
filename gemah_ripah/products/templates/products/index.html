@@ -31,7 +31,8 @@
                 <th>Buy Price</th>
                 <th>Sell Price</th>
                 <th>Margin</th>
-                <th>Stock</th>
+                <th>Sold</th>
+                <th>In Stock</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -52,6 +53,7 @@
                 <td class="text-right">{{ product.buy_price|floatformat:0|intcomma }}</td>
                 <td class="text-right">{{ product.price|floatformat:0|intcomma }}</td>
                 <td class="text-right">{{ product.margin|floatformat:0|intcomma }}</td>
+                <td class="text-right">{{ product.total_sold }}</td>
                 <td class="text-right">{{ product.stock }}</td>
                 <td class="text-center">
                     <a href="{% url 'products:edit' product.id %}" class="">Edit</a>
