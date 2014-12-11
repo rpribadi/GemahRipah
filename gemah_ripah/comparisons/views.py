@@ -34,14 +34,14 @@ def index(request):
         })
 
     product_list = Product.objects.all().order_by('name').prefetch_related(
-        models.Prefetch('purchaseitem_set', queryset=PurchaseItem.objects.select_related('purchase').order_by('-purchase__date', '-id'))
+        models.Prefetch('purchaseitem_set', queryset=PurchaseItem.objects.filter(purchase__is_active=True).select_related('purchase').order_by('-purchase__date', '-id'), to_attr='purchaseitems')
     ).prefetch_related(
         models.Prefetch('productcomparison_set', queryset=ProductComparison.objects.select_related('seller'))
     )
 
     for product in product_list:
-        if product.purchaseitem_set.all().count():
-            product.buy_price = product.purchaseitem_set.all()[0].price
+        if len(product.purchaseitems):
+            product.buy_price = product.purchaseitems[0].price
             product.margin = product.price - product.buy_price
 
         product.comparison_list = copy.deepcopy(comparison_list_template)
