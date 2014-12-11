@@ -1,5 +1,6 @@
 import datetime
 import difflib
+import re
 import time
 
 from urllib2 import urlopen
@@ -73,7 +74,9 @@ class Command(BaseCommand):
                 print "  --> Found %d" % len(rows)
                 for index, row in enumerate(rows):
                     name = row.find('div', class_='product_title').get_text().strip()
-                    name = name.replace("\n", "").strip().upper()
+                    name = name.strip().upper()
+                    name = re.sub('[\t\n\r\f\v]+', '', name).strip()
+                    name = re.sub('[ ]{2,}', ' ', name).strip()
 
                     if row.find('span', class_='product_price_promo'):
                         price = row.find('span', class_='product_price_promo').get_text().replace(".", "").replace("Rp", "").strip()

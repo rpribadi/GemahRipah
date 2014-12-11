@@ -1,5 +1,6 @@
 import datetime
 import difflib
+import re
 
 from urllib2 import urlopen
 from bs4 import BeautifulSoup
@@ -64,7 +65,10 @@ class Command(BaseCommand):
                 cols = row.find_all("td")
                 if index >= 2 and cols[0].get_text().strip():
                     name = "%s %s" % (cols[2].get_text().strip(), cols[3].get_text().strip())
-                    name = name.replace("\n", "").strip().upper()
+                    name = name.strip().upper()
+                    name = re.sub('[\t\n\r\f\v]+', '', name).strip()
+                    name = re.sub('[ ]{2,}', ' ', name).strip()
+
                     price = int(cols[5].get_text().replace(".", "").strip())
 
                     item = {
