@@ -15,7 +15,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(ProductComparison)
 class ProductComparisonAdmin(admin.ModelAdmin):
-    list_display = ("seller", "name", "status", "current_price", "last_modified")
+    list_display = ("seller", "name", "product", "status", "current_price", "last_modified")
     search_fields = ("name", )
 
     def status(self, obj):
