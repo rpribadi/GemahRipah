@@ -35,23 +35,28 @@
                     </tr>
                     <tr>
                         <td>Buy Price</td>
-                        <td>{{ product.buy_price|floatformat:0|intcomma }} <em>(*Based on latest purchase price)</em></td>
+                        <td><strong><mark>{{ product.buy_price|floatformat:0|intcomma }}</mark></strong> <em>(*Based on latest purchase price)</em></td>
                     </tr>
                     <tr>
                         <td>Sell Price</td>
                         <td>
-                            {{ product.price|floatformat:0|intcomma }}
+                            <p>
+                            <strong><mark>{{ product.price|floatformat:0|intcomma }}</mark></strong>
+                            </p>
                             {% if comparison_list %}
-                            <h5><u>Comparisons</u></h5>
+                            <div class="col-md-offset-1">
+
+                            <p class="text-muted"><u>Comparisons</u></p>
                             <table class="table table-bordered table-condensed">
                                 {% for comparison in comparison_list %}
                                 <tr>
                                     <td>{{ comparison.seller.code }} {% if comparison.is_on_promotion %}<em class="text-muted">(promo)</em>{% endif %}</td>
-                                    <td class="text-right">{{ comparison.current_price|floatformat:0|intcomma }}</td>
+                                    <td class="text-right {% if comparison.current_price < product.price %}danger{% endif %}">{{ comparison.current_price|floatformat:0|intcomma }}</td>
                                     <td>{{ comparison.last_modified|date:"d M" }}</td>
                                 </tr>
                                 {% endfor %}
                             </table>
+                            </div>
                             {% endif %}
                         </td>
                     </tr>
