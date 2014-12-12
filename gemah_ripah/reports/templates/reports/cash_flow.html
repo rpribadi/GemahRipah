@@ -1,0 +1,36 @@
+{% extends "reports/base.html" %}
+
+{% load humanize %}
+
+{% block content %}
+    {% if record_list %}
+        <table class="table table-condensed table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="">Date</th>
+                    <th class="">Revenues</th>
+                    <th class="">Expenses</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in record_list %}
+                <tr>
+                    <td>{{ item.name }}</a></td>
+                    <td class="text-right"><a href="#">{{ item.revenues|floatformat:0|intcomma }}</a></td>
+                    <td class="text-right"><a href="#">{{ item.expenses|floatformat:0|intcomma }}</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No records are available.</p>
+    {% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+});
+</script>
+{% endblock %}

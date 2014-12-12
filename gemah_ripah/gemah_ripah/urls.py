@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^admin/other-expenses/', include('other_expenses.urls', namespace="other_expenses")),
     url(r'^admin/merchants/', include('merchants.urls', namespace="merchants")),
     url(r'^admin/comparisons/', include('comparisons.urls', namespace="comparisons")),
+    url(r'^admin/reports/', include('reports.urls', namespace="reports")),
 
     url(r'^secured/', include(admin.site.urls)),
 )
