@@ -60,7 +60,8 @@ def cash_flow(request):
         })
         curr += datetime.timedelta(days=1)
 
-    for sales in Sales.objects.filter(date__range=[start_date, end_date]).prefetch_related('salesitem_set'):
+    for sales in Sales.objects.filter(date__gte=start_date, date__lt=end_date).prefetch_related('salesitem_set'):
+        print sales.date, sales.date.day-1, sales.net_income
         record_list[sales.date.day-1]['revenues'] += sales.net_income
         total_revenues += sales.net_income
 
