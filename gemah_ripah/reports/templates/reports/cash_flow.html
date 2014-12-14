@@ -3,7 +3,22 @@
 {% load humanize %}
 
 {% block content %}
+    <p>
+        <form class="form-inline" method="get" action=".">
+            Select <strong>Period</strong>:
+            <select name="period" class="form-control">
+                {% for item in range_list %}
+                <option value="{{ item.value }}" {% if item.value == current_date %}SELECTED{% endif %}>{{ item.text }}</option>
+                {% endfor %}
+            </select>
+            &nbsp; <button type="submit" class="btn btn-sm btn-primary">Update</button>
+        </form>
+    </p>
     {% if record_list %}
+        <div class="row">
+
+        <div class="col-md-8">
+
         <table class="table table-condensed table-striped table-bordered table-hover">
             <thead>
                 <tr>
@@ -14,14 +29,21 @@
             </thead>
             <tbody>
                 {% for item in record_list %}
-                <tr>
-                    <td>{{ item.name }}</a></td>
-                    <td class="text-right"><a href="#">{{ item.revenues|floatformat:0|intcomma }}</a></td>
-                    <td class="text-right"><a href="#">{{ item.expenses|floatformat:0|intcomma }}</a></td>
+                <tr class="{% if item.date.isoweekday == 6 or item.date.isoweekday == 7 %}info{% endif %}">
+                    <td>{{ item.date|date:"d, D" }}</a></td>
+                    <td class="text-right">{% if item.revenues %}{{ item.revenues|floatformat:0|intcomma }}{% endif %}</td>
+                    <td class="text-right">{% if item.expenses %}{{ item.expenses|floatformat:0|intcomma }}{% endif %}</td>
                 </tr>
                 {% endfor %}
+                <tr>
+                    <td class="text-right"><strong>TOTAL</strong></td>
+                    <td class="text-right success"><strong><mark>{{ total_revenues|floatformat:0|intcomma }}</mark></strong></td>
+                    <td class="text-right danger"><strong><mark>{{ total_expenses|floatformat:0|intcomma }}</mark></strong></td>
+                </tr>
             </tbody>
         </table>
+        </div>
+        </div>
     {% else %}
         <p>No records are available.</p>
     {% endif %}
