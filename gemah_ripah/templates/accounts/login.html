@@ -19,8 +19,9 @@
             {% endif %}
 
 
-            <form class="form-signin form-horizontal" role="form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+            <form class="form-signin form-horizontal" role="form" method="post" action=".">
                 {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}" />
                 <div class="form-group {% if form.username.errors %} has-error {% endif %}">
                     <label class="col-sm-3 control-label" for="{{ form.username.auto_id }}">{{ form.username.label }}</label>
                     <div class="col-sm-5">
