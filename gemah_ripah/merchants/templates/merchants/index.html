@@ -3,7 +3,7 @@
 {% load humanize %}
 
 {% block sub_menu %}
-    <a href="{% url 'merchants:add' %}" class="btn btn-primary">Add New Merchant</a>
+    <a href="{% url 'admin:merchants:add' %}" class="btn btn-primary">Add New Merchant</a>
 {% endblock %}
 
 {% block content %}
@@ -36,7 +36,7 @@
                     <td>{{ item.name }}</td>
                     <td>{{ item.is_active }}</td>
                     <td class="text-center">
-                        <a href="{% url 'merchants:edit' item.id %}">Edit</a>
+                        <a href="{% url 'admin:merchants:edit' item.id %}">Edit</a>
                     </td>
                 </tr>
                 {% endfor %}

@@ -15,6 +15,7 @@ from models import Sales, SalesItem
 def index(request):
     context = {
         'page_header': "Sales",
+        'page_title': "Sales",
         'sales_list': Sales.objects.all().prefetch_related(
             models.Prefetch("salesitem_set", queryset=SalesItem.objects.select_related("product").order_by('product__name'))
         )
@@ -59,6 +60,7 @@ def add(request):
 
     context = {
         'page_header': "Add New Sales",
+        'page_title': "Add New Sales",
         'form': form,
         'formset': formset
     }
@@ -106,6 +108,7 @@ def edit(request, id):
 
     context = {
         'page_header': "Edit Sales ID: %s" % id,
+        'page_title': "Edit Sales ID: %s" % id,
         'form': form,
         'formset': formset
     }
@@ -125,6 +128,7 @@ def detail(request, id):
 
     context = {
         'page_header': "Sales Detail ID: %s" % id,
+        'page_title': "Sales Detail ID: %s" % id,
         'sales': sales
     }
 
@@ -143,4 +147,4 @@ def delete(request, id):
         messages.success(request, 'Record has been deleted successfully.')
     except Exception, e:
         messages.error(request, 'Failed to delete record. Reason: %s' % e, extra_tags='danger')
-    return HttpResponseRedirect(reverse("sales:index"))
+    return HttpResponseRedirect(reverse("admin:sales:index"))

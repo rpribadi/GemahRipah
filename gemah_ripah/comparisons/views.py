@@ -213,6 +213,7 @@ def import_comparison(request):
 
     context = {
         'page_header': "Import Comparison",
+        'page_title': "Import Comparison",
         'form': form
     }
 

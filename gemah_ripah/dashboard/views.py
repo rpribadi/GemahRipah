@@ -48,6 +48,7 @@ def index(request):
 
     context = {
         'page_header': "Summaries",
+        'page_title': "Summaries",
         'inventory': {
             'total_purchased': inventory['total_purchased__sum'],
             'total_sold': inventory['total_sold__sum'],

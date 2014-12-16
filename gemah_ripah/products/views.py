@@ -23,6 +23,7 @@ def index(request):
 
     context = {
         'page_header': "Products",
+        'page_title': "Products",
         'product_list': product_list
     }
 
@@ -45,7 +46,7 @@ def add_edit(request, id=None):
             form.save()
             messages.success(request, 'Record has been saved successfully.')
             if id:
-                return HttpResponseRedirect(reverse("products:index"))
+                return HttpResponseRedirect(reverse("admin:products:index"))
             return HttpResponseRedirect(".")
         else:
             messages.error(request, 'Failed to save record. Please correct the errors below.', extra_tags='danger')
@@ -54,6 +55,7 @@ def add_edit(request, id=None):
 
     context = {
         'page_header': ("Edit Product ID: %s" % id) if id else "Add New Product",
+        'page_title': ("Edit Product ID: %s" % id) if id else "Add New Product",
         'form': form
     }
 
@@ -92,6 +94,7 @@ def detail(request, id):
 
     context = {
         'page_header': "Product Detail ID: %s" % product.id,
+        'page_title': "Product Detail ID: %s" % product.id,
         'product': product,
         'comparison_list': comparison_list,
         'purchase_list': purchase_list,

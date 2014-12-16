@@ -12,6 +12,7 @@ from models import Merchant
 def index(request):
     context = {
         'page_header': "Merchants",
+        'page_title': "Merchants",
         'merchant_list': Merchant.objects.all()
     }
 
@@ -34,7 +35,7 @@ def add_edit(request, id=None):
             form.save()
             messages.success(request, 'Record has been saved successfully.')
             if id:
-                return HttpResponseRedirect(reverse("merchants:index"))
+                return HttpResponseRedirect(reverse("admin:merchants:index"))
             return HttpResponseRedirect(".")
         else:
             messages.error(request, 'Failed to save record. Please correct the errors below.', extra_tags='danger')
@@ -43,6 +44,7 @@ def add_edit(request, id=None):
 
     context = {
         'page_header': ("Edit Other Expenses ID: %s" % id) if id else "Add New Merchant",
+        'page_title': ("Edit Other Expenses ID: %s" % id) if id else "Add New Merchant",
         'form': form
     }
 

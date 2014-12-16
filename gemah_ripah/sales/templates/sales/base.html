@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
 {% block sub_menu %}
-    <a href="{% url 'sales:index' %}" class="btn btn-primary">Back to Index</a>
-    <a href="{% url 'sales:add' %}" class="btn btn-primary">Add New Sales</a>
+    <a href="{% url 'admin:sales:index' %}" class="btn btn-primary">Back to Index</a>
+    <a href="{% url 'admin:sales:add' %}" class="btn btn-primary">Add New Sales</a>
 {% endblock %}

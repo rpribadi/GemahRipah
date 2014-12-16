@@ -9,6 +9,18 @@ shop_urls = patterns('',
 
 )
 
+admin_urls = patterns('',
+    url(r'^$', RedirectView.as_view(pattern_name='admin:dashboard')),
+    url(r'^dashboard/$', 'dashboard.views.index', name='dashboard'),
+    url(r'^products/', include('products.urls', namespace="products")),
+    url(r'^sales/', include('sales.urls', namespace="sales")),
+    url(r'^purchase/', include('purchase.urls', namespace="purchase")),
+    url(r'^other-expenses/', include('other_expenses.urls', namespace="other_expenses")),
+    url(r'^merchants/', include('merchants.urls', namespace="merchants")),
+    url(r'^comparisons/', include('comparisons.urls', namespace="comparisons")),
+    url(r'^reports/', include('reports.urls', namespace="reports")),
+)
+
 urlpatterns = patterns('',
     url(r'^$', RedirectView.as_view(pattern_name='shop:home')),
     url(r'^shop/', include(shop_urls, namespace="shop")),
@@ -16,15 +28,6 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'accounts/login.html'}, name="login"),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
 
-    url(r'^admin/$', RedirectView.as_view(pattern_name='dashboard')),
-    url(r'^admin/dashboard/$', 'dashboard.views.index', name='dashboard'),
-    url(r'^admin/products/', include('products.urls', namespace="products")),
-    url(r'^admin/sales/', include('sales.urls', namespace="sales")),
-    url(r'^admin/purchase/', include('purchase.urls', namespace="purchase")),
-    url(r'^admin/other-expenses/', include('other_expenses.urls', namespace="other_expenses")),
-    url(r'^admin/merchants/', include('merchants.urls', namespace="merchants")),
-    url(r'^admin/comparisons/', include('comparisons.urls', namespace="comparisons")),
-    url(r'^admin/reports/', include('reports.urls', namespace="reports")),
-
+    url(r'^admin/', include(admin_urls, namespace="admin")),
     url(r'^secured/', include(admin.site.urls)),
 )
