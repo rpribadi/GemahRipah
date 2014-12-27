@@ -69,7 +69,7 @@ class Command(BaseCommand):
                     name = re.sub('[\t\n\r\f\v]+', '', name).strip()
                     name = re.sub('[ ]{2,}', ' ', name).strip()
 
-                    price = int(cols[5].get_text().replace(".", "").strip())
+                    price = int(cols[5].get_text().replace(".", "").replace(",", "").strip())
 
                     item = {
                         "name": name,
