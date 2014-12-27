@@ -35,7 +35,7 @@ def add_edit(request, id=None):
             form.save()
             messages.success(request, 'Record has been saved successfully.')
             if id:
-                return HttpResponseRedirect(reverse("admin:merchants:index"))
+                return HttpResponseRedirect(reverse("internal:merchants:index"))
             return HttpResponseRedirect(".")
         else:
             messages.error(request, 'Failed to save record. Please correct the errors below.', extra_tags='danger')

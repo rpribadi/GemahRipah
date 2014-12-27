@@ -3,7 +3,7 @@
 {% load humanize %}
 
 {% block sub_menu %}
-    <a href="{% url 'admin:other_expenses:add' %}" class="btn btn-primary">Add New Other Expenses</a>
+    <a href="{% url 'internal:other_expenses:add' %}" class="btn btn-primary">Add New Other Expenses</a>
 {% endblock %}
 
 {% block content %}
@@ -36,9 +36,9 @@
                     <td>{{ item.remarks }}</td>
                     <td class="text-right">{{ item.amount|floatformat:0|intcomma }}</td>
                     <td class="text-center">
-                        <a href="{% url 'admin:other_expenses:edit' item.id %}">Edit</a>
+                        <a href="{% url 'internal:other_expenses:edit' item.id %}">Edit</a>
                         |
-                        <a href="{% url 'admin:other_expenses:delete' item.id %}" class="delete">Delete</a>
+                        <a href="{% url 'internal:other_expenses:delete' item.id %}" class="delete">Delete</a>
                     </td>
                 </tr>
                 {% endfor %}

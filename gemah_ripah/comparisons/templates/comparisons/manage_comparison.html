@@ -47,7 +47,7 @@
                 <tr>
                     <td>{{ forloop.counter0|add:product_list.start_index }}.</td>
                     <td>
-                        <a href="{% url 'admin:products:detail' item.id %}">{{ item.name }}</a>
+                        <a href="{% url 'internal:products:detail' item.id %}">{{ item.name }}</a>
 
                         <div class="row">
                             <div class="col-md-10 selected">
@@ -58,7 +58,7 @@
                                         <td>{{ comparison.seller.code }}</td>
                                         <td>{{ comparison.name }}</td>
                                         <td class="text-right">{{ comparison.current_price|floatformat:0|intcomma }}</td>
-                                        <td class="text-center"><a class="remove" href="{% url 'admin:comparisons:edit' %}?product={{ item.id }}&comparison={{ comparison.id }}">Remove</a></td>
+                                        <td class="text-center"><a class="remove" href="{% url 'internal:comparisons:edit' %}?product={{ item.id }}&comparison={{ comparison.id }}">Remove</a></td>
                                     </tr>
                                     {% endfor %}
                                 </table>
@@ -82,7 +82,7 @@
                                             <td>{{ comparison.seller.code }}</td>
                                             <td>{{ comparison.name }}</td>
                                             <td class="text-right">{{ comparison.current_price|floatformat:0|intcomma }}</td>
-                                            <td class="text-center"><a class="select" href="{% url 'admin:comparisons:edit' %}?product={{ item.id }}&comparison={{ comparison.id }}">Select</a></td>
+                                            <td class="text-center"><a class="select" href="{% url 'internal:comparisons:edit' %}?product={{ item.id }}&comparison={{ comparison.id }}">Select</a></td>
                                         </tr>
                                         {% endfor %}
                                     </table>

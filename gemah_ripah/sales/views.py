@@ -147,4 +147,4 @@ def delete(request, id):
         messages.success(request, 'Record has been deleted successfully.')
     except Exception, e:
         messages.error(request, 'Failed to delete record. Reason: %s' % e, extra_tags='danger')
-    return HttpResponseRedirect(reverse("admin:sales:index"))
+    return HttpResponseRedirect(reverse("internal:sales:index"))

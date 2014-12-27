@@ -3,7 +3,7 @@
 {% load humanize %}
 
 {% block sub_menu %}
-    <a href="{% url 'admin:purchase:add' %}" class="btn btn-primary">Add New Purchase</a>
+    <a href="{% url 'internal:purchase:add' %}" class="btn btn-primary">Add New Purchase</a>
 {% endblock %}
 
 {% block content %}
@@ -34,15 +34,15 @@
                 {% for purchase in purchase_list %}
                 <tr>
                     <td>{{ forloop.counter }}.</td>
-                    <td><a href="{% url 'admin:purchase:detail' purchase.id %}">{{ purchase.date }}</a>{% if not purchase.is_active %} <em class="text-muted">(draft)</em>{% endif %}</td>
+                    <td><a href="{% url 'internal:purchase:detail' purchase.id %}">{{ purchase.date }}</a>{% if not purchase.is_active %} <em class="text-muted">(draft)</em>{% endif %}</td>
                     <td>{{ purchase.supplier }}</td>
                     <td class="text-right">{{ purchase.net_expenses|floatformat:0|intcomma }}</td>
                     <td class="text-right">{{ purchase.total_items }}</td>
                     <td>{{ purchase.remarks }}</td>
                     <td class="text-center">
-                        <a href="{% url 'admin:purchase:edit' purchase.id %}">Edit</a>
+                        <a href="{% url 'internal:purchase:edit' purchase.id %}">Edit</a>
                         |
-                        <a href="{% url 'admin:purchase:delete' purchase.id %}" class="delete">Delete</a>
+                        <a href="{% url 'internal:purchase:delete' purchase.id %}" class="delete">Delete</a>
                     </td>
                 </tr>
                 {% endfor %}

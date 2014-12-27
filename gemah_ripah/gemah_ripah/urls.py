@@ -10,7 +10,7 @@ shop_urls = patterns('',
 )
 
 admin_urls = patterns('',
-    url(r'^$', RedirectView.as_view(pattern_name='admin:dashboard')),
+    url(r'^$', RedirectView.as_view(pattern_name='internal:dashboard')),
     url(r'^dashboard/$', 'dashboard.views.index', name='dashboard'),
     url(r'^products/', include('products.urls', namespace="products")),
     url(r'^sales/', include('sales.urls', namespace="sales")),
@@ -29,6 +29,6 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'accounts/login.html'}, name="login"),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
 
+    url(r'^admin/', include(admin_urls, namespace="internal")),
     url(r'^secured/', include(admin.site.urls)),
-    url(r'^admin/', include(admin_urls, namespace="admin")),
 )

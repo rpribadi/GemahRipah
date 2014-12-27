@@ -3,7 +3,7 @@
 {% load humanize %}
 
 {% block sub_menu %}
-    <a href="{% url 'admin:members:add' %}" class="btn btn-primary">Add New Member</a>
+    <a href="{% url 'internal:members:add' %}" class="btn btn-primary">Add New Member</a>
 {% endblock %}
 
 {% block content %}
@@ -37,7 +37,7 @@
                     <td class="text-right">{{ item.points|floatformat:2|intcomma }}</td>
                     <td class="text-center">
                         {% comment %}
-                        <a href="{% url 'admin:members:edit' item.id %}">Edit</a>
+                        <a href="{% url 'internal:members:edit' item.id %}">Edit</a>
                         {% endcomment %}
                     </td>
                 </tr>

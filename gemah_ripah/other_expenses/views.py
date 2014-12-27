@@ -35,7 +35,7 @@ def add_edit(request, id=None):
             form.save()
             messages.success(request, 'Record has been saved successfully.')
             if id:
-                return HttpResponseRedirect(reverse("admin:other_expenses:index"))
+                return HttpResponseRedirect(reverse("internal:other_expenses:index"))
             return HttpResponseRedirect(".")
         else:
             messages.error(request, 'Failed to save record. Please correct the errors below.', extra_tags='danger')
@@ -63,4 +63,4 @@ def delete(request, id):
         messages.success(request, 'Record has been deleted successfully.')
     except Exception, e:
         messages.error(request, 'Failed to delete record. Reason: %s' % e, extra_tags='danger')
-    return HttpResponseRedirect(reverse("admin:other_expenses:index"))
+    return HttpResponseRedirect(reverse("internal:other_expenses:index"))

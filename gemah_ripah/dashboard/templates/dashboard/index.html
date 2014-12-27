@@ -70,7 +70,7 @@
                         <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
                     </button>
                     {% endif %}
-                    <a href="{% url 'admin:products:detail' item.product.id %}">{{ item.product }}</a>
+                    <a href="{% url 'internal:products:detail' item.product.id %}">{{ item.product }}</a>
                 </td>
                 <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
                 <td class="text-right">{{ item.quantity|intcomma }}</td>
@@ -104,7 +104,7 @@
                         <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
                     </button>
                     {% endif %}
-                    <a href="{% url 'admin:products:detail' item.id %}">{{ item.name }}</a>
+                    <a href="{% url 'internal:products:detail' item.id %}">{{ item.name }}</a>
                 </td>
                 <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
                 <td class="text-right">{{ item.total_sold|intcomma }}</td>
@@ -138,7 +138,7 @@
                         <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
                     </button>
                     {% endif %}
-                    <a href="{% url 'admin:products:detail' item.id %}">{{ item.name }}</a>
+                    <a href="{% url 'internal:products:detail' item.id %}">{{ item.name }}</a>
                 </td>
                 <td>{{ item.total_sold }}</td>
                 <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>

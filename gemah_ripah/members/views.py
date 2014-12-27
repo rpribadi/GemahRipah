@@ -32,7 +32,7 @@ def add(request):
         if form.is_valid():
             obj = form.save()
             messages.success(request, 'Record has been saved successfully.')
-            return HttpResponseRedirect(reverse("admin:members:detail", kwargs={'id':obj.id}))
+            return HttpResponseRedirect(reverse("internal:members:detail", kwargs={'id':obj.id}))
         else:
             messages.error(request, 'Failed to save record. Please correct the errors below.', extra_tags='danger')
     else:

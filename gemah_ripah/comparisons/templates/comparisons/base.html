@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block sub_menu %}
-    <a href="{% url 'admin:comparisons:index' %}" class="btn btn-primary">Back to Index</a>
-    <a href="{% url 'admin:comparisons:manage_comparison' %}" class="btn btn-primary">Manage</a>
-    <a href="{% url 'admin:comparisons:import_comparison' %}" class="btn btn-primary">Import</a>
+    <a href="{% url 'internal:comparisons:index' %}" class="btn btn-primary">Back to Index</a>
+    <a href="{% url 'internal:comparisons:manage_comparison' %}" class="btn btn-primary">Manage</a>
+    <a href="{% url 'internal:comparisons:import_comparison' %}" class="btn btn-primary">Import</a>
 {% endblock %}

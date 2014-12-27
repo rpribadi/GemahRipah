@@ -3,7 +3,7 @@
 {% load humanize %}
 
 {% block sub_menu %}
-    <a href="{% url 'admin:sales:add' %}" class="btn btn-primary">Add New Sales</a>
+    <a href="{% url 'internal:sales:add' %}" class="btn btn-primary">Add New Sales</a>
 {% endblock %}
 
 {% block content %}
@@ -33,7 +33,7 @@
             {% for sales in sales_list %}
             <tr>
                 <td>{{ forloop.counter }}.</td>
-                <td><a href="{% url 'admin:sales:detail' sales.id %}">{{ sales.date }}</a></td>
+                <td><a href="{% url 'internal:sales:detail' sales.id %}">{{ sales.date }}</a></td>
                 <td class="text-right">{{ sales.net_income|floatformat:0|intcomma }}</td>
                 <td>
                     {% for item in sales.salesitem_set.all %}
@@ -45,7 +45,7 @@
                     </button>
                     {% endif %}
 
-                    <a href="{% url 'admin:products:detail' item.product.id %}">{{ item.product.name }}</a>
+                    <a href="{% url 'internal:products:detail' item.product.id %}">{{ item.product.name }}</a>
                     {% if not forloop.last %}
                     <br />
                     {% endif %}
@@ -53,9 +53,9 @@
                 </td>
                 <td>{{ sales.remarks }}</td>
                 <td class="text-center">
-                    <a href="{% url 'admin:sales:edit' sales.id %}">Edit</a>
+                    <a href="{% url 'internal:sales:edit' sales.id %}">Edit</a>
                     |
-                    <a href="{% url 'admin:sales:delete' sales.id %}" class="delete">Delete</a>
+                    <a href="{% url 'internal:sales:delete' sales.id %}" class="delete">Delete</a>
                 </td>
             </tr>
             {% endfor %}

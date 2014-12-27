@@ -38,8 +38,8 @@
                 </tbody>
             </table>
             <div class="col-md-offset-5">
-                <a href="{% url 'admin:sales:edit' sales.id %}" class="btn btn-primary">Edit</a>
-                <a href="{% url 'admin:sales:delete' sales.id %}" class="delete btn btn-primary">Delete</a>
+                <a href="{% url 'internal:sales:edit' sales.id %}" class="btn btn-primary">Edit</a>
+                <a href="{% url 'internal:sales:delete' sales.id %}" class="delete btn btn-primary">Delete</a>
             </div>
         </div>
     </div>
@@ -66,7 +66,7 @@
                                     <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
                                 </button>
                                 {% endif %}
-                                <a href="{% url 'admin:products:detail' item.product.id %}">{{ item.product }}</a>
+                                <a href="{% url 'internal:products:detail' item.product.id %}">{{ item.product }}</a>
                             </td>
                             <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
                             <td class="text-right">{{ item.quantity|intcomma }}</td>

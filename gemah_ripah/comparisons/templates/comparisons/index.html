@@ -34,7 +34,7 @@
                 {% for item in product_list %}
                 <tr>
                     <td>{{ forloop.counter }}.</td>
-                    <td><a href="{% url 'admin:products:detail' item.id %}">{{ item.name }}</a></td>
+                    <td><a href="{% url 'internal:products:detail' item.id %}">{{ item.name }}</a></td>
                     <td class="text-right">{{ item.buy_price|floatformat:0|intcomma }}</td>
                     <td class="text-right">{{ item.margin|floatformat:0|intcomma }}</td>
                     <td class="text-right {% if item.is_cheapest %}success{% endif %}">{{ item.price|floatformat:0|intcomma }}</td>
