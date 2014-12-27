@@ -1,0 +1,58 @@
+{% extends "other_expenses/base.html" %}
+
+{% load humanize %}
+
+{% block sub_menu %}
+    <a href="{% url 'admin:members:add' %}" class="btn btn-primary">Add New Member</a>
+{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">{{  message.level }}:</span>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if member_list %}
+        <table class="table table-condensed table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Points</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in member_list %}
+                <tr>
+                    <td>{{ forloop.counter }}.</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
+                    <td class="text-right">{{ item.points|floatformat:2|intcomma }}</td>
+                    <td class="text-center">
+                        {% comment %}
+                        <a href="{% url 'admin:members:edit' item.id %}">Edit</a>
+                        {% endcomment %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No members are available.</p>
+    {% endif %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+
+});
+</script>
+{% endblock %}

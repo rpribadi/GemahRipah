@@ -1,0 +1,88 @@
+{% extends "members/base.html" %}
+
+{% load humanize %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-striped table-header">
+                <tbody>
+                    <tr>
+                        <td class="col-md-5">Date</td>
+                        <td>{{ sales.date }}</td>
+                    </tr>
+                    <tr>
+                        <td>Total Items</td>
+                        <td>{{ sales.total_items|intcomma }}</td>
+                    </tr>
+                    <tr>
+                        <td>Gross Income</td>
+                        <td>{{ sales.gross_income|floatformat:0|intcomma }}</td>
+                    </tr>
+                    <tr>
+                        <td>Discount</td>
+                        <td>{{ sales.discount|floatformat:0|intcomma }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Net Income</strong></td>
+                        <td><mark><strong>{{ sales.net_income|floatformat:0|intcomma }}</strong></mark></td>
+                    </tr>
+                    {% if sales.remarks %}
+                    <tr>
+                        <td>Remarks</td>
+                        <td>{{ sales.remarks }}</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            <div class="col-md-offset-5">
+                <a href="{% url 'admin:members:edit' member.id %}" class="btn btn-primary">Edit</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <fieldset>
+                <legend>Sales Items</legend>
+                <table class="table table-condensed table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in sales.salesitem_set.all %}
+                        <tr>
+                            <td>{{ forloop.counter }}.</td>
+                            <td>
+                                {% if item.product.remarks %}
+                                <button type="button" class="pops btn btn-danger btn-xs" aria-label="Left Align" data-toggle="popover" title="Remarks" data-trigger="focus" data-content="{{ item.product.remarks }}">
+                                    <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                                </button>
+                                {% endif %}
+                                <a href="{% url 'admin:products:detail' item.product.id %}">{{ item.product }}</a>
+                            </td>
+                            <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
+                            <td class="text-right">{{ item.quantity|intcomma }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+
+});
+</script>
+{% endblock %}

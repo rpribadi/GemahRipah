@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block sub_menu %}
+    <a href="{% url 'admin:members:index' %}" class="btn btn-primary">Back to Index</a>
+    <a href="{% url 'admin:members:add' %}" class="btn btn-primary">Add New Member</a>
+{% endblock %}

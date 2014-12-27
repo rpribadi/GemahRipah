@@ -19,6 +19,7 @@ admin_urls = patterns('',
     url(r'^merchants/', include('merchants.urls', namespace="merchants")),
     url(r'^comparisons/', include('comparisons.urls', namespace="comparisons")),
     url(r'^reports/', include('reports.urls', namespace="reports")),
+    url(r'^members/', include('members.urls', namespace="members")),
 )
 
 urlpatterns = patterns('',
@@ -28,6 +29,6 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'accounts/login.html'}, name="login"),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
 
-    url(r'^admin/', include(admin_urls, namespace="admin")),
     url(r'^secured/', include(admin.site.urls)),
+    url(r'^admin/', include(admin_urls, namespace="admin")),
 )

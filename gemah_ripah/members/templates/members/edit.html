@@ -1,0 +1,70 @@
+{% extends "members/base.html" %}
+
+{% load humanize %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<form method="post" action="." role="form" class="form-horizontal">
+    {% csrf_token %}
+    {{ form.id }}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">{{ message.level }}:</span>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    <div class="row">
+        <div class="col-md-8">
+
+            <div class="form-group {% if form.date.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.date.auto_id }}">{{ form.date.label }}</label>
+                <div class="col-sm-4">
+                    {{ form.date.errors }}
+                    {{ form.date|add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="form-group {% if form.remarks.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.remarks.auto_id }}">{{ form.remarks.label }}</label>
+                <div class="col-sm-9">
+                    {{ form.remarks.errors }}
+                    {{ form.remarks|add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="form-group {% if form.amount.errors %} has-error {% endif %}">
+                <label class="col-sm-3 control-label" for="{{ form.amount.auto_id }}">{{ form.amount.label }}</label>
+                <div class="col-sm-4">
+                    {{ form.amount.errors }}
+                    {{ form.amount|add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-10">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="{% url 'admin:other_expenses:index' %}" class="btn btn-primary">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+    $("#id_date").datepicker({
+        format: "yyyy-mm-dd"
+    })
+    .on("changeDate", function(){
+        $("#id_date").datepicker("hide");
+    });
+});
+</script>
+{% endblock %}
