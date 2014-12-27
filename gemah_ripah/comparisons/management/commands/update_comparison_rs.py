@@ -81,6 +81,9 @@ class Command(BaseCommand):
                     name = row.find(class_="name").get_text().strip()
                     name = name.upper().replace("GR.","GR").strip()
                     name = re.sub(" \*.*\*", "", name.upper()).strip()
+                    name = re.sub('[\t\n\r\f\v]+', '', name).strip()
+                    name = re.sub('[ ]{2,}', ' ', name).strip()
+                    name = name.upper()
 
                     if row.find(class_="price-old"):
                         price = row.find(class_="price-old").get_text().strip()
