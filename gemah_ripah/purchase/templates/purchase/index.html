@@ -1,6 +1,7 @@
 {% extends "purchase/base.html" %}
 
 {% load humanize %}
+{% load pagination_tags %}
 
 {% block sub_menu %}
     <a href="{% url 'internal:purchase:add' %}" class="btn btn-primary">Add New Purchase</a>
@@ -17,7 +18,9 @@
         {% endfor %}
     {% endif %}
 
+    {% autopaginate purchase_list max_per_page %}
     {% if purchase_list %}
+        {% paginate %}
         <table class="table table-condensed table-striped table-bordered table-hover">
             <thead>
                 <tr>
@@ -48,6 +51,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% paginate %}
     {% else %}
         <p>No purchases are available.</p>
     {% endif %}

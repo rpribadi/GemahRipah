@@ -16,7 +16,8 @@ def index(request):
     context = {
         'page_header': "Purchase",
         'page_title': "Purchase",
-        'purchase_list': Purchase.objects.select_related('supplier')
+        'purchase_list': Purchase.objects.select_related('supplier'),
+        'max_per_page': 50
     }
 
     return render(
