@@ -18,7 +18,8 @@ def index(request):
         'page_title': "Sales",
         'sales_list': Sales.objects.all().prefetch_related(
             models.Prefetch("salesitem_set", queryset=SalesItem.objects.select_related("product").order_by('product__name'))
-        )
+        ),
+        'max_per_page': 50
     }
 
     return render(

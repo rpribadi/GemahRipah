@@ -1,6 +1,7 @@
 {% extends "sales/base.html" %}
 
 {% load humanize %}
+{% load pagination_tags %}
 
 {% block sub_menu %}
     <a href="{% url 'internal:sales:add' %}" class="btn btn-primary">Add New Sales</a>
@@ -17,7 +18,9 @@
     {% endfor %}
 {% endif %}
 
+{% autopaginate sales_list max_per_page %}
 {% if sales_list %}
+    {% paginate %}
     <table class="table table-condensed table-striped table-bordered table-hover">
         <thead>
             <tr>
@@ -61,6 +64,7 @@
             {% endfor %}
         </tbody>
     </table>
+    {% paginate %}
 {% else %}
     <p>No sales are available.</p>
 {% endif %}
