@@ -64,12 +64,12 @@ class Command(BaseCommand):
             for index, row in enumerate(rows):
                 cols = row.find_all("td")
                 if index >= 2 and cols[0].get_text().strip():
-                    name = "%s %s" % (cols[2].get_text().strip(), cols[3].get_text().strip())
+                    name = "%s %s" % (cols[3].get_text().strip(), cols[4].get_text().strip())
                     name = name.strip().upper()
                     name = re.sub('[\t\n\r\f\v]+', '', name).strip()
                     name = re.sub('[ ]{2,}', ' ', name).strip()
 
-                    price = int(cols[5].get_text().replace(".", "").replace(",", "").strip())
+                    price = int(cols[6].get_text().replace(".", "").replace(",", "").strip())
 
                     item = {
                         "name": name,
