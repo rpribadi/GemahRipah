@@ -50,7 +50,7 @@ INSTALLED_APPS = (
     'other_expenses',
     'merchants',
     'comparisons',
-    'members',
+    # 'members',
     'reports'
 )
 
