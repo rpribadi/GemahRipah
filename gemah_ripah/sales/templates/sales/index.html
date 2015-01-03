@@ -35,7 +35,7 @@
         <tbody>
             {% for sales in sales_list %}
             <tr>
-                <td>{{ forloop.counter }}.</td>
+                <td>{{ forloop.counter0|add:page_obj.start_index }}.</td>
                 <td><a href="{% url 'internal:sales:detail' sales.id %}">{{ sales.date }}</a></td>
                 <td class="text-right">{{ sales.net_income|floatformat:0|intcomma }}</td>
                 <td>

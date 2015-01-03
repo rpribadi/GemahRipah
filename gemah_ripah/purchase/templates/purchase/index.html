@@ -36,7 +36,7 @@
             <tbody>
                 {% for purchase in purchase_list %}
                 <tr>
-                    <td>{{ forloop.counter }}.</td>
+                    <td>{{ forloop.counter0|add:page_obj.start_index }}.</td>
                     <td><a href="{% url 'internal:purchase:detail' purchase.id %}">{{ purchase.date }}</a>{% if not purchase.is_active %} <em class="text-muted">(draft)</em>{% endif %}</td>
                     <td>{{ purchase.supplier }}</td>
                     <td class="text-right">{{ purchase.net_expenses|floatformat:0|intcomma }}</td>
