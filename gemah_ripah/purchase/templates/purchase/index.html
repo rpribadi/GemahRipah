@@ -28,7 +28,7 @@
                     <th>Date</th>
                     <th>Supplier</th>
                     <th>Net Expenses</th>
-                    <th>Total Items</th>
+                    <th class="col-md-4">Items</th>
                     <th>Remarks</th>
                     <th>Action</th>
                 </tr>
@@ -40,7 +40,14 @@
                     <td><a href="{% url 'internal:purchase:detail' purchase.id %}">{{ purchase.date }}</a>{% if not purchase.is_active %} <em class="text-muted">(draft)</em>{% endif %}</td>
                     <td>{{ purchase.supplier }}</td>
                     <td class="text-right">{{ purchase.net_expenses|floatformat:0|intcomma }}</td>
-                    <td class="text-right">{{ purchase.total_items }}</td>
+                    <td>
+                        {% for item in purchase.purchaseitem_set.all %}
+                        ({{ item.quantity }}) - {{ item.product.name }}
+                        {% if not forloop.last %}
+                        <br />
+                        {% endif %}
+                        {% endfor %}
+                    </td>
                     <td>{{ purchase.remarks }}</td>
                     <td class="text-center">
                         <a href="{% url 'internal:purchase:edit' purchase.id %}">Edit</a>

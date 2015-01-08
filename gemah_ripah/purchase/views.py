@@ -16,7 +16,9 @@ def index(request):
     context = {
         'page_header': "Purchase",
         'page_title': "Purchase",
-        'purchase_list': Purchase.objects.select_related('supplier'),
+        'purchase_list': Purchase.objects.select_related('supplier').prefetch_related(
+            models.Prefetch('purchaseitem_set', queryset=PurchaseItem.objects.select_related('product').order_by('product__name'))
+        ),
         'max_per_page': 50
     }
 
