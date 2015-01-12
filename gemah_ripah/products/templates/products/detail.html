@@ -29,6 +29,10 @@
                         <td>Total Sold</td>
                         <td>{{ product.total_sold|intcomma }}</td>
                     </tr>
+                    <tr>
+                        <td>Total Sales Profit</td>
+                        <td><strong><mark>{{ total_profit|floatformat:0|intcomma }}</mark></strong></td>
+                    </tr>
                     <tr class="info">
                         <td><strong>In Stock</strong></td>
                         <td><strong><mark>{{ product.stock|intcomma }}</mark></strong></td>
@@ -83,6 +87,7 @@
                             <th>Date</th>
                             <th>Sell Price</th>
                             <th>Quantity</th>
+                            <th>Profit</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -92,6 +97,7 @@
                             <td>{{ item.sales.date }}</td>
                             <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
                             <td class="text-right">{{ item.quantity|intcomma }}</td>
+                            <td class="text-right">{{ item.profit|floatformat:0|intcomma }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

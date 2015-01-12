@@ -72,10 +72,10 @@ def detail(request, id):
     product.buy_price = None
     product.margin = None
 
-    purchase_list = product.purchaseitem_set.filter(purchase__is_active=True).select_related("purchase", "purchase__supplier").order_by('-purchase__date', '-id')
+    purchase_list = product.purchaseitem_set.filter(purchase__is_active=True).select_related("purchase", "purchase__supplier").order_by('purchase__date', 'id')
 
     if len(purchase_list):
-        product.buy_price = purchase_list[0].price
+        product.buy_price = purchase_list.last().price
         product.margin = product.price - product.buy_price
 
 
@@ -90,7 +90,25 @@ def detail(request, id):
         })
 
     comparison_list = product.productcomparison_set.all().select_related('seller').order_by('-last_modified')
-    sales_list = product.salesitem_set.all().select_related("sales").order_by('-sales__date')
+    sales_list = product.salesitem_set.all().select_related("sales").order_by('sales__date')
+
+    item_price_map = []
+    for purchase in purchase_list:
+        for idx in range(0, purchase.quantity):
+            item_price_map.append(purchase.price)
+
+    cursor = 0
+    total_profit = 0
+    for sales in sales_list:
+        profit = 0
+        for idx in range(0, sales.quantity):
+            profit += sales.price - item_price_map[cursor]
+            cursor += 1
+        sales.profit = profit
+        total_profit += profit
+
+    sales_list = sales_list[::-1]
+    purchase_list = purchase_list[::-1]
 
     context = {
         'page_header': "Product Detail ID: %s" % product.id,
@@ -98,7 +116,8 @@ def detail(request, id):
         'product': product,
         'comparison_list': comparison_list,
         'purchase_list': purchase_list,
-        'sales_list': sales_list
+        'sales_list': sales_list,
+        'total_profit': total_profit
     }
 
     return render(
