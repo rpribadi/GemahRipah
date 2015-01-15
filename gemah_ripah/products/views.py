@@ -93,17 +93,21 @@ def detail(request, id):
     sales_list = product.salesitem_set.all().select_related("sales").order_by('sales__date')
 
     item_price_map = []
+    total_purchase = 0
     for purchase in purchase_list:
         for idx in range(0, purchase.quantity):
             item_price_map.append(purchase.price)
+            total_purchase += purchase.price
 
     cursor = 0
     total_profit = 0
+    total_sales = 0
     for sales in sales_list:
         profit = 0
         for idx in range(0, sales.quantity):
             profit += sales.price - item_price_map[cursor]
             cursor += 1
+            total_sales += sales.price
         sales.profit = profit
         total_profit += profit
 
@@ -117,7 +121,9 @@ def detail(request, id):
         'comparison_list': comparison_list,
         'purchase_list': purchase_list,
         'sales_list': sales_list,
-        'total_profit': total_profit
+        'total_profit': total_profit,
+        'total_sales': total_sales,
+        'total_purchase': total_purchase
     }
 
     return render(
