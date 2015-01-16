@@ -56,14 +56,17 @@ def cash_flow(request):
         record_list.append({
             'date': curr,
             'revenues': 0,
-            'expenses': 0
+            'expenses': 0,
+            'total_sold_items': 0
         })
         curr += datetime.timedelta(days=1)
 
+    total_sold_items = 0
     for sales in Sales.objects.filter(date__gte=start_date, date__lt=end_date).prefetch_related('salesitem_set'):
-        print sales.date, sales.date.day-1, sales.net_income
         record_list[sales.date.day-1]['revenues'] += sales.net_income
+        record_list[sales.date.day-1]['total_sold_items'] += sales.total_items
         total_revenues += sales.net_income
+        total_sold_items += sales.total_items
 
     for purchase in Purchase.objects.filter(is_active=True, date__range=[start_date, end_date]).prefetch_related('purchaseitem_set'):
         record_list[purchase.date.day-1]['expenses'] += purchase.net_expenses
@@ -78,6 +81,7 @@ def cash_flow(request):
         'page_header': "Cash Flow Report",
         'record_list': record_list,
         'range_list': range_list,
+        'total_sold_items': total_sold_items,
         'total_expenses': total_expenses,
         'total_revenues': total_revenues,
         'current_date': current_date.strftime("%Y-%m-%d")

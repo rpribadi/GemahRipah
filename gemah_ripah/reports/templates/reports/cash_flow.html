@@ -23,20 +23,23 @@
             <thead>
                 <tr>
                     <th class="">Date</th>
-                    <th class="">Revenues</th>
-                    <th class="">Expenses</th>
+                    <th class="col-md-3">Total Sold Items</th>
+                    <th class="col-md-3">Revenues</th>
+                    <th class="col-md-3">Expenses</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in record_list %}
                 <tr class="{% if item.date.isoweekday == 6 or item.date.isoweekday == 7 %}info{% endif %}">
                     <td>{{ item.date|date:"d, D" }}</a></td>
+                    <td class="text-right">{% if item.total_sold_items %}{{ item.total_sold_items|intcomma }}{% endif %}</td>
                     <td class="text-right">{% if item.revenues %}{{ item.revenues|floatformat:0|intcomma }}{% endif %}</td>
                     <td class="text-right">{% if item.expenses %}{{ item.expenses|floatformat:0|intcomma }}{% endif %}</td>
                 </tr>
                 {% endfor %}
                 <tr>
                     <td class="text-right"><strong>TOTAL</strong></td>
+                    <td class="text-right warning"><strong><mark>{{ total_sold_items|floatformat:0|intcomma }}</mark></strong></td>
                     <td class="text-right success"><strong><mark>{{ total_revenues|floatformat:0|intcomma }}</mark></strong></td>
                     <td class="text-right danger"><strong><mark>{{ total_expenses|floatformat:0|intcomma }}</mark></strong></td>
                 </tr>
