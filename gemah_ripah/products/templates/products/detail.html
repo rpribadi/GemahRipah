@@ -41,7 +41,6 @@
                                 <tbody>
                                 {% for item in draft_purchase_list %}
                                 <tr>
-                                    <td>{{ forloop.counter }}.</td>
                                     <td>{{ item.purchase.date }}</td>
                                     <td>{{ item.purchase.supplier.name }}</td>
                                     <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
