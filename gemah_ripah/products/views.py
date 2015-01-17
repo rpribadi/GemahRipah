@@ -72,7 +72,7 @@ def detail(request, id):
     product.buy_price = None
     product.margin = None
 
-    draft_purchase_list = product.purchaseitem_set.filter(purchase__is_active=False).select_related("purchase", "purchase__supplier").order_by('purchase__date', 'id')
+    draft_purchase_list = product.purchaseitem_set.filter(purchase__is_active=False).select_related("purchase", "purchase__supplier").order_by('-purchase__date', 'id')
     purchase_list = product.purchaseitem_set.filter(purchase__is_active=True).select_related("purchase", "purchase__supplier").order_by('purchase__date', 'id')
 
     if len(purchase_list):
