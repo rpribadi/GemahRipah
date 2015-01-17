@@ -72,6 +72,7 @@ def detail(request, id):
     product.buy_price = None
     product.margin = None
 
+    draft_purchase_list = product.purchaseitem_set.filter(purchase__is_active=False).select_related("purchase", "purchase__supplier").order_by('purchase__date', 'id')
     purchase_list = product.purchaseitem_set.filter(purchase__is_active=True).select_related("purchase", "purchase__supplier").order_by('purchase__date', 'id')
 
     if len(purchase_list):
@@ -91,6 +92,10 @@ def detail(request, id):
 
     comparison_list = product.productcomparison_set.all().select_related('seller').order_by('-last_modified')
     sales_list = product.salesitem_set.all().select_related("sales").order_by('sales__date')
+
+    total_draft_purchase = 0
+    for item in draft_purchase_list:
+        total_draft_purchase += item.quantity
 
     item_price_map = []
     total_purchase = 0
@@ -119,11 +124,13 @@ def detail(request, id):
         'page_title': "Product Detail ID: %s" % product.id,
         'product': product,
         'comparison_list': comparison_list,
+        'draft_purchase_list': draft_purchase_list,
         'purchase_list': purchase_list,
         'sales_list': sales_list,
         'total_profit': total_profit,
         'total_sales': total_sales,
-        'total_purchase': total_purchase
+        'total_purchase': total_purchase,
+        'total_draft_purchase': total_draft_purchase
     }
 
     return render(
