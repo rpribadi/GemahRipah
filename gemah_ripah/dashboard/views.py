@@ -60,7 +60,7 @@ def index(request):
             'total_income': int(total_income),
             'profit': int(total_income - (total_product_expenses + other_expenses))
         },
-        'latest_sold_items': SalesItem.objects.select_related('sales', 'product').order_by('-sales__date')[:20],
+        'latest_sold_items': SalesItem.objects.select_related('sales', 'product').order_by('-sales__date', '-id')[:20],
         'popular_products': Product.objects.filter(total_sold__gt=0).order_by('-total_sold', 'name')[:20],
         'out_of_stock_list': out_of_stock_list
     }
