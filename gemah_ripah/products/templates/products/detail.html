@@ -83,6 +83,12 @@
                         <td><strong>Margin</strong></td>
                         <td><strong><mark>{{ product.margin|floatformat:0|intcomma }}</mark></strong></td>
                     </tr>
+                    {% if product.remarks %}
+                    <tr class="danger">
+                        <td>Remarks</td>
+                        <td>{{ product.remarks }}</td>
+                    </tr>
+                    {% endif %}
                 </tbody>
             </table>
             <div class="col-md-offset-4">
