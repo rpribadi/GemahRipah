@@ -24,7 +24,7 @@ def cash_flow(request):
 
     temp = []
     temp.append(Sales.objects.aggregate(models.Min('date'), models.Max('date')))
-    temp.append(Purchase.objects.filter(is_active=True).aggregate(models.Min('date'), models.Max('date')))
+    temp.append(Purchase.objects.all().aggregate(models.Min('date'), models.Max('date')))
     temp.append(OtherExpenses.objects.aggregate(models.Min('date'), models.Max('date')))
     min_max = [temp[0]['date__min'], temp[0]['date__max']]
 
@@ -57,6 +57,8 @@ def cash_flow(request):
             'date': curr,
             'revenues': 0,
             'expenses': 0,
+            'draft_included': False,
+            'total_draft_expenses': 0,
             'total_sold_items': 0
         })
         curr += datetime.timedelta(days=1)
@@ -68,9 +70,13 @@ def cash_flow(request):
         total_revenues += sales.net_income
         total_sold_items += sales.total_items
 
-    for purchase in Purchase.objects.filter(is_active=True, date__range=[start_date, end_date]).prefetch_related('purchaseitem_set'):
+    for purchase in Purchase.objects.filter(date__range=[start_date, end_date]).prefetch_related('purchaseitem_set'):
         record_list[purchase.date.day-1]['expenses'] += purchase.net_expenses
         total_expenses += purchase.net_expenses
+        if not purchase.is_active:
+            record_list[purchase.date.day-1]['total_draft_expenses'] += purchase.net_expenses
+            record_list[purchase.date.day-1]['draft_included'] = True
+
 
     for item in OtherExpenses.objects.filter(date__range=[start_date, end_date]):
         record_list[item.date.day-1]['expenses'] += item.amount
