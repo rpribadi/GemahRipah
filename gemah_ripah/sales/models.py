@@ -44,7 +44,7 @@ class SalesItem(models.Model):
     sales = models.ForeignKey(Sales)
     product = models.ForeignKey(Product)
     price = models.DecimalField(max_digits=10, decimal_places=1, validators=[MinValueValidator(0)])
-    quantity = models.PositiveIntegerField(default=0)
+    quantity = models.PositiveIntegerField(default=0, validators=[MinValueValidator(1)])
     last_modified = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, editable=False)
 
