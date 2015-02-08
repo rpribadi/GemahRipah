@@ -47,7 +47,7 @@
                     </button>
                     {% endif %}
 
-                    <a href="{% url 'internal:products:detail' product.id %}">{{ product.name }}</a>
+                    <a href="{% url 'internal:products:detail' product.id %}" class="{% if not product.is_active %}text-muted{% endif %}">{% if not product.is_active %}<s>{{ product.name }}</s>{% else %}{{ product.name }}{% endif %}</a>
                 </td>
                 <td>{{ product.brand }}</td>
                 <td class="text-right">{{ product.buy_price|floatformat:0|intcomma }}</td>
