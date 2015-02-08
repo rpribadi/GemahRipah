@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.dispatch import receiver
 
+from gemah_ripah.models import CharUpperCaseField
 from merchants.models import Merchant
 from products.models import Product
 
@@ -69,8 +70,20 @@ class Purchase(models.Model):
 class PurchaseItem(models.Model):
     purchase = models.ForeignKey(Purchase)
     product = models.ForeignKey(Product)
-    quantity = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    quantity = models.IntegerField(default=0, validators=[MinValueValidator(1)])
     price = models.DecimalField(max_digits=10, decimal_places=1, validators=[MinValueValidator(0)])
+    expiry_date = CharUpperCaseField(
+        max_length=50,
+        blank=True,
+        null=True,
+        validators=[
+            RegexValidator(
+                regex='^[a-zA-Z]{3}[-]\d{4}$',
+                message='Invalid format',
+                code='invalid_expiry_date_format'
+            ),
+        ]
+    )
     last_modified = models.DateTimeField(auto_now=True, editable=False)
     modified_by = models.ForeignKey(User, editable=False)
 

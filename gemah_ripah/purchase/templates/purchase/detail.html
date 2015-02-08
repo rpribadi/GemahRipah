@@ -73,6 +73,7 @@
                             <th>Est. Margin</th>
                             <th>Quantity</th>
                             <th>Est. Profit</th>
+                            <th>Exp. Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -92,6 +93,7 @@
                             <td class="text-right">{{ item.estimated_margin|floatformat:0|intcomma }}</td>
                             <td class="text-right">{{ item.quantity|intcomma }}</td>
                             <td class="text-right">{{ item.estimated_profit|floatformat:0|intcomma }}</td>
+                            <td class="text-center">{{ item.expiry_date|default:"-" }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

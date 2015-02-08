@@ -93,6 +93,7 @@
                             <th>Price</th>
                             <th>In Stock</th>
                             <th class="col-sm-1">Quantity</th>
+                            <th class="">Exp. Date<br />(MMM-YYYY)</th>
                             <th class="col-sm-1">Action</th>
                         </tr>
                     </thead>
@@ -113,6 +114,10 @@
                             <td class="{% if form.quantity.errors %} has-error {% endif %}">
                                 {{ form.quantity.errors }}
                                 {{ form.quantity|add_class:"form-control" }}
+                            </td>
+                            <td class="{% if form.expiry_date.errors %} has-error {% endif %}">
+                                {{ form.expiry_date.errors }}
+                                {{ form.expiry_date|add_class:"form-control" }}
                             </td>
                             <td class="text-center"></td>
                         </tr>

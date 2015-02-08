@@ -140,6 +140,7 @@
                             <th>Supplier</th>
                             <th>Buy Price</th>
                             <th>Quantity</th>
+                            <th>Exp. Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -150,6 +151,7 @@
                             <td>{{ item.purchase.supplier.name }}{% if not item.purchase.is_active %} <em class="text-muted">(draft)</em>{% endif %}</td>
                             <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
                             <td class="text-right">{{ item.quantity|intcomma }}</td>
+                            <td class="text-center">{{ item.expiry_date|default:"-" }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
