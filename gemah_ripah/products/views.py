@@ -110,7 +110,10 @@ def detail(request, id):
     for sales in sales_list:
         profit = 0
         for idx in range(0, sales.quantity):
-            profit += sales.price - item_price_map[cursor]
+            if cursor < len(item_price_map):
+                profit += sales.price - item_price_map[cursor]
+            else:
+                pass
             cursor += 1
             total_sales += sales.price
         sales.profit = profit
