@@ -70,15 +70,16 @@ def cash_flow(request):
         total_revenues += sales.net_income
         total_sold_items += sales.total_items
 
-    for purchase in Purchase.objects.filter(date__range=[start_date, end_date]).prefetch_related('purchaseitem_set'):
+    for purchase in Purchase.objects.filter(date__gte=start_date, date__lt=end_date).prefetch_related('purchaseitem_set'):
         record_list[purchase.date.day-1]['expenses'] += purchase.net_expenses
         total_expenses += purchase.net_expenses
         if not purchase.is_active:
+            print purchase.id, purchase.date
             record_list[purchase.date.day-1]['total_draft_expenses'] += purchase.net_expenses
             record_list[purchase.date.day-1]['draft_included'] = True
 
 
-    for item in OtherExpenses.objects.filter(date__range=[start_date, end_date]):
+    for item in OtherExpenses.objects.filter(date__gte=start_date, date__lt=end_date):
         record_list[item.date.day-1]['expenses'] += item.amount
         total_expenses += item.amount
 
