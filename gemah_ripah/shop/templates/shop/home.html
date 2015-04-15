@@ -25,7 +25,7 @@
                 <td>{{ product.brand }}</td>
                 <td>{{ product.name }}</td>
                 <td class="text-right">{{ product.price|floatformat:0|intcomma }}</td>
-                <td class="text-right">{{ product.stock }}</td>
+                <td class="text-right">{% if product.stock < 5 %}{{ product.stock }}{% else %}Available{% endif %}</td>
             </tr>
             {% endfor %}
         </tbody>
