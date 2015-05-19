@@ -48,7 +48,7 @@
                     {% if purchase.remarks %}
                     <tr>
                         <td>Remarks</td>
-                        <td>{{ purchase.remarks }}</td>
+                        <td>{{ purchase.remarks|linebreaks }}</td>
                     </tr>
                     {% endif %}
                 </tbody>

@@ -63,9 +63,9 @@
             </div>
             <div class="form-group {% if form.remarks.errors %} has-error {% endif %}">
                 <label class="col-sm-3 control-label" for="{{ form.remarks.auto_id }}">{{ form.remarks.label }}</label>
-                <div class="col-sm-6">
+                <div class="col-sm-9">
                     {{ form.remarks.errors }}
-                    {{ form.remarks|add_class:"form-control"|attr:"rows:2" }}
+                    {{ form.remarks|add_class:"form-control"|attr:"rows:5"}}
                 </div>
             </div>
         </div>

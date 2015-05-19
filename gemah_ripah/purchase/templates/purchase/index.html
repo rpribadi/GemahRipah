@@ -49,7 +49,7 @@
                         {% endif %}
                         {% endfor %}
                     </td>
-                    <td>{{ purchase.remarks }}</td>
+                    <td>{{ purchase.remarks|linebreaks }}</td>
                     <td class="text-center">
                         <a href="{% url 'internal:purchase:edit' purchase.id %}">Edit</a>
                         |
