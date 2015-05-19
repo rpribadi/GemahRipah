@@ -34,7 +34,8 @@ def add(request):
         Sales,
         SalesItem,
         formset=MinimumRequiredFormSet,
-        form=SalesItemForm
+        form=SalesItemForm,
+        extra=2
     )
     if request.method == "POST":
         form = SalesForm(request.POST)
@@ -80,7 +81,8 @@ def edit(request, id):
         Sales,
         SalesItem,
         formset=MinimumRequiredFormSet,
-        form=SalesItemForm
+        form=SalesItemForm,
+        extra=1
     )
     if request.method == "POST":
         form = SalesForm(request.POST, instance=sales)
