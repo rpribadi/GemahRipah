@@ -54,7 +54,12 @@
                 <td class="text-right">{{ product.price|floatformat:0|intcomma }}</td>
                 <td class="text-right">{{ product.margin|floatformat:0|intcomma }}</td>
                 <td class="text-right">{{ product.total_sold }}</td>
-                <td class="text-right">{{ product.stock }}</td>
+                <td class="text-right">
+                    {{ product.stock }}
+                    {% if product.total_incoming %}
+                    + {{ product.total_incoming }}
+                    {% endif %}
+                </td>
                 <td class="text-center">
                     <a href="{% url 'internal:products:edit' product.id %}" class="">Edit</a>
                 </td>

@@ -120,10 +120,16 @@ def update_pre_total_purchased(instance):
         old_instance = PurchaseItem.objects.get(pk=instance.id)
         if old_instance.product.id != instance.product.id:
             total = 0
-            items = PurchaseItem.objects.filter(product=old_instance.product).exclude(pk=old_instance.id)
+            items = PurchaseItem.objects.filter(product=old_instance.product, purchase__is_active=True).exclude(pk=old_instance.id)
             for item in items:
                 total += item.quantity
             old_instance.product.total_purchased = total
+
+            total = 0
+            items = PurchaseItem.objects.filter(product=old_instance.product, purchase__is_active=False).exclude(pk=old_instance.id)
+            for item in items:
+                total += item.quantity
+            old_instance.product.total_incoming = total
 
             old_instance.product.save()
 
@@ -134,6 +140,12 @@ def update_post_total_purchased(product):
     for item in items:
         total += item.quantity
     product.total_purchased = total
+
+    total = 0
+    items = PurchaseItem.objects.filter(product=product, purchase__is_active=False)
+    for item in items:
+        total += item.quantity
+    product.total_incoming = total
 
     product.save()
 

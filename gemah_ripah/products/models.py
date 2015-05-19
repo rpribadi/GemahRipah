@@ -16,6 +16,7 @@ class Product(models.Model):
     name = CharUpperCaseField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=1, validators=[MinValueValidator(0)])
     total_purchased = models.IntegerField(default=0, editable=False)
+    total_incoming = models.IntegerField(default=0, editable=False)
     total_sold = models.IntegerField(default=0, editable=False)
     is_active = models.BooleanField(default=True)
     remarks = models.TextField(blank=True, null=True)
