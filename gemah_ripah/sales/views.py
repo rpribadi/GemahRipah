@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -55,7 +57,7 @@ def add(request):
         else:
             messages.error(request, 'Failed to save record. Please correct the errors below.', extra_tags='danger')
     else:
-        form = SalesForm()
+        form = SalesForm(initial={'date': datetime.date.today().strftime("%m/%d/%Y")})
         formset = SalesItemFormSet(
             minimum_forms=1
         )
