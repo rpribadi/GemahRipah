@@ -91,6 +91,7 @@ def cash_flow(request):
         'total_sold_items': total_sold_items,
         'total_expenses': total_expenses,
         'total_revenues': total_revenues,
+        'total_profit': total_revenues - total_expenses,
         'current_date': current_date.strftime("%Y-%m-%d")
     }
 
