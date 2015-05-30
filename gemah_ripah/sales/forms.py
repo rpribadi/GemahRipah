@@ -22,8 +22,14 @@ class SalesItemForm(ModelForm):
         super(SalesItemForm, self).__init__(*args, **kwargs)
 
         # get different list of choices here
-        choices = [(None, "----------")]
+        choices = []
+        group_member = [(None, "----------")]
+        group_name = ""
         for product in Product.objects.values_list('id', 'name', 'is_active'):
             name = product[1] if product[2] else "(inactive) - %s" % product[1]
-            choices.append((product[0], name))
+            if group_name != product[1].split()[0]:
+                choices.append((group_name, group_member))
+                group_member = []
+                group_name = product[1].split()[0]
+            group_member.append((product[0], name))
         self.fields["product"].choices = choices
