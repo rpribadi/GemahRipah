@@ -10,6 +10,8 @@ from gemah_ripah.forms import MinimumRequiredFormSet
 from forms import PurchaseForm, PurchaseItemForm
 from models import Purchase, PurchaseItem
 
+from merchants.models import Merchant
+
 
 @login_required
 def index(request):
@@ -17,15 +19,21 @@ def index(request):
     purchase_list = Purchase.objects.select_related('supplier').prefetch_related(
             models.Prefetch('purchaseitem_set', queryset=PurchaseItem.objects.select_related('product').order_by('product__name'))
         )
+    supplier = request.GET.get('supplier', "")
 
     if order_id:
         purchase_list = purchase_list.filter(remarks__icontains=order_id)
+    if supplier:
+        purchase_list = purchase_list.filter(supplier__code=supplier)
 
+    supplier_list = [{'code': "", 'name': "--ALL--"}] + list(Merchant.objects.values('code', 'name'))
     context = {
         'page_header': "Purchase",
         'page_title': "Purchase",
         'purchase_list': purchase_list,
         'order_id': order_id,
+        'supplier': supplier,
+        'supplier_list': supplier_list,
         'max_per_page': 50
     }
 

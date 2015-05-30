@@ -25,7 +25,15 @@
         <p>
             <form class="form-inline" method="get" action=".">
                 <!--<input type="hidden" name="page" value="{{ page }}">-->
-                Find by <strong>Order ID</strong>:
+
+                <strong>Supplier</strong>:
+                <select name="supplier" class="form-control">
+                    {% for item in supplier_list %}
+                    <option value="{{ item.code }}" {% if item.code == supplier %}SELECTED{% endif %}>{{ item.name }}</option>
+                    {% endfor %}
+                </select>
+                &nbsp;
+                <strong>Order ID</strong>:
                 <div class="form-group">
                     <input type="text" class="form-control" name="order_id" value="{{ order_id }}" style="width: 225px;">
                 </div>
