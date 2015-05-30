@@ -21,6 +21,19 @@
     {% autopaginate purchase_list max_per_page %}
     {% if purchase_list %}
         {% paginate %}
+    {% endif %}
+        <p>
+            <form class="form-inline" method="get" action=".">
+                <!--<input type="hidden" name="page" value="{{ page }}">-->
+                Find by <strong>Order ID</strong>:
+                <div class="form-group">
+                    <input type="text" class="form-control" name="order_id" value="{{ order_id }}" style="width: 225px;">
+                </div>
+                &nbsp; <button type="submit" class="btn btn-sm btn-primary">Update Filter</button>
+                <a href="{% url 'internal:purchase:index' %}" class="btn btn-sm btn-default">Clear Filter</a>
+            </form>
+        </p>
+    {% if purchase_list %}
         <table class="table table-condensed table-striped table-bordered table-hover">
             <thead>
                 <tr>

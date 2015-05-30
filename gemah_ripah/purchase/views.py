@@ -13,12 +13,19 @@ from models import Purchase, PurchaseItem
 
 @login_required
 def index(request):
+    order_id = request.GET.get('order_id', "")
+    purchase_list = Purchase.objects.select_related('supplier').prefetch_related(
+            models.Prefetch('purchaseitem_set', queryset=PurchaseItem.objects.select_related('product').order_by('product__name'))
+        )
+
+    if order_id:
+        purchase_list = purchase_list.filter(remarks__icontains=order_id)
+
     context = {
         'page_header': "Purchase",
         'page_title': "Purchase",
-        'purchase_list': Purchase.objects.select_related('supplier').prefetch_related(
-            models.Prefetch('purchaseitem_set', queryset=PurchaseItem.objects.select_related('product').order_by('product__name'))
-        ),
+        'purchase_list': purchase_list,
+        'order_id': order_id,
         'max_per_page': 50
     }
 
