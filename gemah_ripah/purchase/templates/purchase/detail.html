@@ -43,7 +43,7 @@
                     </tr>
                     <tr class="{% if purchase.estimated_profit < 0 %}danger{% else %}success{% endif %}">
                         <td><strong>Est. Profit</strong></td>
-                        <td><mark><strong>{{ purchase.estimated_profit|floatformat:0|intcomma }} ({{ purchase.estimated_profit_percentage|floatformat:2|intcomma }}%)</strong></mark></td>
+                        <td><mark><strong>{{ purchase.estimated_profit|floatformat:0|intcomma }}</strong> <em>({{ purchase.estimated_profit_percentage|floatformat:2|intcomma }}%)</em></mark></td>
                     </tr>
                     {% if purchase.remarks %}
                     <tr>
