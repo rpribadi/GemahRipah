@@ -66,6 +66,10 @@ class Purchase(models.Model):
     def estimated_profit(self):
         return self.estimated_revenues - self.net_expenses
 
+    @property
+    def estimated_profit_percentage(self):
+        return self.estimated_profit * 100 /  self.net_expenses
+
 
 class PurchaseItem(models.Model):
     purchase = models.ForeignKey(Purchase)
