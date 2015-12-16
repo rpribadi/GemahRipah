@@ -33,6 +33,13 @@
                     {% endfor %}
                 </select>
                 &nbsp;
+                <strong>Status</strong>:
+                <select name="is_active" class="form-control">
+                    {% for item in status_list %}
+                    <option value="{{ item.code }}" {% if item.code == is_active %}SELECTED{% endif %}>{{ item.name }}</option>
+                    {% endfor %}
+                </select>
+                &nbsp;
                 <strong>Order ID</strong>:
                 <div class="form-group">
                     <input type="text" class="form-control" name="order_id" value="{{ order_id }}" style="width: 225px;">

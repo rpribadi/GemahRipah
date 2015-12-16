@@ -20,13 +20,23 @@ def index(request):
             models.Prefetch('purchaseitem_set', queryset=PurchaseItem.objects.select_related('product').order_by('product__name'))
         )
     supplier = request.GET.get('supplier', "")
+    is_active = request.GET.get('is_active', "")
 
     if order_id:
         purchase_list = purchase_list.filter(remarks__icontains=order_id)
     if supplier:
         purchase_list = purchase_list.filter(supplier__code=supplier)
+    if is_active == "True":
+        purchase_list = purchase_list.filter(is_active=True)
+    elif is_active == "False":
+        purchase_list = purchase_list.filter(is_active=False)
 
     supplier_list = [{'code': "", 'name': "--ALL--"}] + list(Merchant.objects.values('code', 'name'))
+    status_list = [
+        {'code': "", 'name': "--ALL--"},
+        {'code': "False", 'name': "DRAFT"},
+        {'code': "True", 'name': "RECEIVED"},
+    ]
     context = {
         'page_header': "Purchase",
         'page_title': "Purchase",
