@@ -44,6 +44,8 @@ def index(request):
         'order_id': order_id,
         'supplier': supplier,
         'supplier_list': supplier_list,
+        'is_active': is_active,
+        'status_list': status_list,
         'max_per_page': 50
     }
 
