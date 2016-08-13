@@ -115,7 +115,7 @@
                     {% for item in sales_list %}
                         <tr>
                             <td>{{ forloop.counter }}.</td>
-                            <td><a href="{% url 'internal:sales:detail' item.sales.id %}">{{ item.sales.date|date:"M d,Y" }}</a></td>
+                            <td><a href="{% url 'internal:sales:detail' item.sales.id %}">{{ item.sales.date|date:"M d, Y" }}</a></td>
                             <td class="text-right">{{ item.price|floatformat:0|intcomma }}</td>
                             <td class="text-right">{{ item.quantity|intcomma }}</td>
                             <td class="text-right">{{ item.profit|floatformat:0|intcomma }}</td>
